@@ -1,22 +1,21 @@
 package se.onemanstudio.test.umain.ui.theme
 
 import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.toColorInt
 
-val darkText = Color("#1F2B2E".toColorInt())
-val lightText = Color("#FFFFFF".toColorInt())
-val subtitle = Color("#999999".toColorInt())
-val bg = Color("#F8F8F8".toColorInt())
-val selected = Color("#E2A364".toColorInt())
-val positive = Color("#2ECC71".toColorInt())
-val negative = Color("#C0392B".toColorInt())
+val darkText = Color(0xFF1F2B2E)
+val lightText = Color(0xFFFFFFFF)
+val subtitle = Color(0xFF999999)
+val bg = Color(0xFFF8F8F8)
+val selected = Color(0xFFE2A364)
+val positive = Color(0xFF2ECC71)
+val negative = Color(0xFFC0392B)
 
-val primary = Color("#1F2B2E".toColorInt())
-val secondary = Color("#999999".toColorInt())
-val background = Color("#F8F8F8".toColorInt())
-val surface = Color("#ffffff".toColorInt())
-val error = Color("#C0392B".toColorInt())
-val outline = Color("#1F2B2E".toColorInt())
+val primary = Color(0xFF1F2B2E)
+val secondary = Color(0xFF999999)
+val background = Color(0xFFF8F8F8)
+val surface = Color(0xFFffffff)
+val error = Color(0xFFC0392B)
+val outline = Color(0xFF1F2B2E)
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

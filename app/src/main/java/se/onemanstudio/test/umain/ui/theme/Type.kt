@@ -14,7 +14,8 @@ val helveticaFamily = FontFamily(
 )
 
 val interFamily = FontFamily(
-    Font(R.font.inter_medium, FontWeight.Medium)
+    Font(R.font.inter_medium, FontWeight.Medium),
+    Font(R.font.inter_bold, FontWeight.Bold)
 )
 
 val poppinsFamily = FontFamily(
@@ -44,7 +45,7 @@ val Typography = Typography(
         fontFamily = helveticaFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 24.sp,
-        lineHeight = 16.sp,
+        lineHeight = 18.sp,
     ),
 
     //headline2
@@ -67,6 +68,14 @@ val Typography = Typography(
     labelLarge = TextStyle(
         fontFamily = interFamily,
         fontWeight = FontWeight.Medium,
+        fontSize = 10.sp,
+        lineHeight = 12.sp,
+    ),
+
+    //footer1
+    labelSmall = TextStyle(
+        fontFamily = interFamily,
+        fontWeight = FontWeight.Bold,
         fontSize = 10.sp,
         lineHeight = 12.sp,
     ),
