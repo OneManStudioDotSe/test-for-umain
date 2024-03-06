@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -22,6 +24,37 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            isDefault = true
+
+            buildConfigField("Boolean", "DEBUG", "true")
+            buildConfigField("String", "BASE_URL", "\"https://food-delivery.umain.io/api/v1/\"")
+
+            versionNameSuffix = "-debug"
+            applicationIdSuffix = ".debug"
+
+            isDebuggable = true
+            isJniDebuggable = false
+
+            //isShrinkResources = false
+            //isMinifyEnabled = false
+            proguardFiles("proguard-android.txt", "proguard-rules.pro")
+
+        }
+
+        getByName("release") {
+            buildConfigField("Boolean", "DEBUG", "false")
+            buildConfigField("String", "BASE_URL", "\"https://food-delivery.umain.io/api/v1/\"")
+
+            isDebuggable = false
+
+            //isShrinkResources = true
+            //isMinifyEnabled = true
+            proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
+        }
+    }
+
+    buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -39,6 +72,15 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+
+    hilt {
+        enableAggregatingTask = true
     }
 
     composeOptions {
@@ -54,6 +96,7 @@ android {
 
 dependencies {
 
+    // Core Android magic
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -63,6 +106,24 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    //Retrofit + OkHttp
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logginginterceptor)
+    implementation(libs.okhttp.urlconnection)
+    implementation(libs.gson)
+
+    // DI
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
+
+    //Tools to make life easier
+    implementation(libs.coil)
+    implementation(libs.timber)
+
+    // Testing
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.tooling)
 }
