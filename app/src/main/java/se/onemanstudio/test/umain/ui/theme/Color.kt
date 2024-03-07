@@ -12,10 +12,13 @@ val negative = Color(0xFFC0392B)
 
 val primary = Color(0xFF1F2B2E)
 val secondary = Color(0xFF999999)
-val background = Color(0xFFF8F8F8)
+val background = Color(0xFF88F8F8)
 val surface = Color(0xFFffffff)
 val error = Color(0xFFC0392B)
 val outline = Color(0xFF1F2B2E)
+
+val primaryContainer = Color(0xFFFFFFFF)
+val secondaryContainer = Color(0xFFFFFFFF)
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

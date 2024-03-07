@@ -28,7 +28,11 @@ private val LightColorScheme = lightColorScheme(
     outline = primary,
 
     onSurface = primary,
-    onBackground = primary
+    primaryContainer = primaryContainer,
+    secondaryContainer = secondaryContainer,
+    onBackground = primary,
+
+    surfaceTint = surface // THIS ONE
 )
 
 @Composable
