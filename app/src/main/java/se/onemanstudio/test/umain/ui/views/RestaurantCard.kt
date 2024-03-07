@@ -2,6 +2,8 @@ package se.onemanstudio.test.umain.ui.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,20 +17,31 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.R
+import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
+import se.onemanstudio.test.umain.ui.theme.surface
+import se.onemanstudio.test.umain.utils.ContentUtils
 
 @Composable
-fun RestaurantCard(title: String, rating: String, tags: List<String>, openTime: String) {
+fun RestaurantCard(
+    title: String,
+    rating: String,
+    tags: List<TagEntry>,
+    openTime: String,
+    onClick: () -> Unit = {}
+) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -39,15 +52,18 @@ fun RestaurantCard(title: String, rating: String, tags: List<String>, openTime: 
         shape = RoundedCornerShape(
             topEnd = 12.dp,
             topStart = 12.dp,
-            bottomEnd = 0.dp,
-            bottomStart = 0.dp
+            bottomEnd = 1.dp,
+            bottomStart = 1.dp
         ),
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onClick() }
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 modifier = Modifier
@@ -71,7 +87,7 @@ fun RestaurantCard(title: String, rating: String, tags: List<String>, openTime: 
                     Spacer(modifier = Modifier.height(2.dp))
 
                     Text(
-                        text = tags.joinToString(separator = " • "),
+                        text = ContentUtils.convertTagsIntoSingleString(tags),
                         style = MaterialTheme.typography.labelMedium
                     )
 
@@ -124,13 +140,19 @@ fun RestaurantCard(title: String, rating: String, tags: List<String>, openTime: 
 @Composable
 private fun RestaurantCardPreview() {
     UmainTheme {
-        Box(modifier = Modifier.padding(16.dp)) {
+        Box(
+            modifier = Modifier
+                .padding(bottom = 20.dp)
+                .background(Color.Cyan)
+        ) {
             RestaurantCard(
                 title = "Farang",
                 rating = "5.0",
-                tags = listOf("Tag1", "Tag2", "Tag3"),
+                tags = ContentUtils.getSampleTagsFew(),
                 openTime = "30 mins"
             )
+            Spacer(modifier = Modifier.height(20.dp))
         }
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }

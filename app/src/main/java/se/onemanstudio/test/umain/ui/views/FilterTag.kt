@@ -25,7 +25,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.R
+import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
+import se.onemanstudio.test.umain.utils.ContentUtils
 
 @Composable
 fun FilterTag(
@@ -33,7 +35,7 @@ fun FilterTag(
     icon: Int,
     index: Int,
     isSelected: Boolean,
-    items: List<String>,
+    items: List<TagEntry>,
     selectedItemIndex: Int,
     onSelectedChanged: (Int) -> Unit
 ) {
@@ -86,7 +88,7 @@ fun FilterTag(
 
 @Composable
 fun FilterTagsList(
-    items: List<String>,
+    items: List<TagEntry>,
     defaultSelectedItemIndex: Int = 0,
     onSelectedChanged: (Int) -> Unit = {}
 ) {
@@ -95,7 +97,7 @@ fun FilterTagsList(
     LazyRow(userScrollEnabled = true) {
         items(items.size) { index: Int ->
             FilterTag(
-                title = items[index],
+                title = items[index].title,
                 icon = R.drawable.filter_sample_image,
                 index = index,
                 isSelected = false,
@@ -118,7 +120,7 @@ private fun FilterTagIdlePreview() {
             icon = R.drawable.filter_sample_image,
             index = 0,
             isSelected = false,
-            items = listOf("tag1", "tag2", "tag3"),
+            items = ContentUtils.getSampleTagsFew(),
             selectedItemIndex = 1,
             onSelectedChanged = {}
         )
@@ -134,7 +136,7 @@ private fun FilterTagSelectedPreview() {
             icon = R.drawable.filter_sample_image,
             index = 0,
             isSelected = true,
-            items = listOf("tag1", "tag2", "tag3"),
+            items = ContentUtils.getSampleTagsFew(),
             selectedItemIndex = 0,
             onSelectedChanged = {}
         )
@@ -146,7 +148,7 @@ private fun FilterTagSelectedPreview() {
 private fun FilterTagsListPreview() {
     UmainTheme {
         FilterTagsList(
-            items = listOf("tag1", "tag2", "tag3", "tag4"),
+            items = ContentUtils.getSampleTagsMany(),
             defaultSelectedItemIndex = 1,
             onSelectedChanged = {}
         )
