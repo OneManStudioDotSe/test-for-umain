@@ -23,9 +23,14 @@ import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 
 @Composable
-fun DetailCard(title: String, subtitle: String, isOpen: Boolean) {
+fun DetailCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    subtitle: String,
+    isOpen: Boolean
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentHeight()
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -62,7 +67,6 @@ fun DetailCard(title: String, subtitle: String, isOpen: Boolean) {
         }
     }
 }
-
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
