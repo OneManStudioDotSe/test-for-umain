@@ -120,7 +120,7 @@ dependencies {
     kapt(libs.hilt.compiler)
 
     //Tools to make life easier
-    implementation(libs.coil)
+    implementation(libs.coil.compose)
     implementation(libs.timber)
 
     // Testing
