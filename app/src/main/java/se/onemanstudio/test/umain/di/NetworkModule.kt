@@ -24,7 +24,7 @@ object NetworkModule {
     @Provides
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .connectTimeout(TIMEOUT_60, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_60, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_60, TimeUnit.SECONDS)
