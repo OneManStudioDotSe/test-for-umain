@@ -4,10 +4,12 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -16,11 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
+import se.onemanstudio.test.umain.utils.ContentUtils
 
 @Composable
 fun DetailCard(
@@ -44,8 +46,7 @@ fun DetailCard(
             Text(
                 modifier = Modifier
                     .height(42.dp)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-                    .background(Color.Red),
+                    .wrapContentHeight(align = Alignment.CenterVertically),
                 text = title,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -55,12 +56,20 @@ fun DetailCard(
             Text(
                 modifier = Modifier
                     .height(35.dp)
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-                    .background(Color.Yellow),
+                    .wrapContentHeight(align = Alignment.CenterVertically),
                 text = subtitle,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.headlineMedium
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                modifier = Modifier.wrapContentSize(),
+                text = ContentUtils.createRandomDescription(),
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodySmall
             )
 
             Status(isOpen = isOpen)
@@ -79,7 +88,7 @@ private fun DetailCardPreview() {
         ) {
             DetailCard(
                 title = "Emilia's Fancy Food",
-                subtitle = "Take-Out • Fast Delivery • Eat-In",
+                subtitle = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsSingle()),
                 isOpen = true
             )
         }
@@ -97,7 +106,7 @@ private fun DetailCardWithWeirdContentPreview() {
         ) {
             DetailCard(
                 title = "Emilia's Fancy Food With More And More Food And More Food",
-                subtitle = "Take-Out • Fast Delivery • Eat-In • Fast Delivery • Eat-In • Fast Delivery • Eat-In",
+                subtitle = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsMany()),
                 isOpen = false
             )
         }

@@ -1,13 +1,11 @@
 package se.onemanstudio.test.umain.ui.views
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -15,24 +13,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.ViewUtils
 
 @Composable
 fun FilterTag(
     title: String,
-    icon: Int,
+    iconUrl: String,
     index: Int,
     isSelected: Boolean,
     items: List<TagEntry>,
@@ -60,10 +60,16 @@ fun FilterTag(
             ),
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
             shape = RoundedCornerShape(16.dp),
-            //selected = selected,
-            //onClick = { selected = !selected },
-            selected = items[selectedItemIndex] == items[index],
+            selected =
+            if (selectedItemIndex != -1) {
+                items[selectedItemIndex] == items[index]
+            } else {
+                false
+            },
+            //selected
             onClick = {
+                //selected = !selected
+
                 //selectedItemIndex = index
                 onSelectedChanged(index)
             },
@@ -76,38 +82,17 @@ fun FilterTag(
             },
         )
 
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .padding(horizontal = 0.dp, vertical = 8.dp)
                 .size(48.dp),
-            painter = painterResource(id = icon),
+            model = iconUrl,
+            placeholder = ViewUtils.debugPlaceholder(R.drawable.filter_sample_image),
+            //TODO: set the error and fallback images
             contentDescription = "Filter description",
+            contentScale = ContentScale.Fit,
+            alignment = Alignment.Center,
         )
-    }
-}
-
-@Composable
-fun FilterTagsList(
-    items: List<TagEntry>,
-    defaultSelectedItemIndex: Int = 0,
-    onSelectedChanged: (Int) -> Unit = {}
-) {
-    var selectedItemIndex by remember { mutableIntStateOf(defaultSelectedItemIndex) }
-
-    LazyRow(userScrollEnabled = true) {
-        items(items.size) { index: Int ->
-            FilterTag(
-                title = items[index].title,
-                icon = R.drawable.filter_sample_image,
-                index = index,
-                isSelected = false,
-                items = items,
-                selectedItemIndex = 1
-            ) {
-                selectedItemIndex = it
-                onSelectedChanged(it)
-            }
-        }
     }
 }
 
@@ -117,7 +102,7 @@ private fun FilterTagIdlePreview() {
     UmainTheme {
         FilterTag(
             title = "Top Rated",
-            icon = R.drawable.filter_sample_image,
+            iconUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
             index = 0,
             isSelected = false,
             items = ContentUtils.getSampleTagsFew(),
@@ -133,7 +118,7 @@ private fun FilterTagSelectedPreview() {
     UmainTheme {
         FilterTag(
             title = "Top Rated",
-            icon = R.drawable.filter_sample_image,
+            iconUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
             index = 0,
             isSelected = true,
             items = ContentUtils.getSampleTagsFew(),
@@ -142,16 +127,3 @@ private fun FilterTagSelectedPreview() {
         )
     }
 }
-
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-private fun FilterTagsListPreview() {
-    UmainTheme {
-        FilterTagsList(
-            items = ContentUtils.getSampleTagsMany(),
-            defaultSelectedItemIndex = 1,
-            onSelectedChanged = {}
-        )
-    }
-}
-

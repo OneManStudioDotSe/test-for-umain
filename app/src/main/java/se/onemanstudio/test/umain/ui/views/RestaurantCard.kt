@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,14 +27,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.ui.theme.surface
 import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.ViewUtils
 
 @Composable
 fun RestaurantCard(
+    coverUrl: String,
     title: String,
     rating: String,
     tags: List<TagEntry>,
@@ -58,18 +59,20 @@ fun RestaurantCard(
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 0.dp, vertical = 8.dp)
             .clickable { onClick() }
     ) {
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .height(132.dp)
                     .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.restaurant_sample_image),
+                model = coverUrl,
+                placeholder = ViewUtils.debugPlaceholder(R.drawable.restaurant_sample_image),
+                //TODO: set the error and fallback images
                 contentDescription = "Restaurant image",
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.TopCenter,
@@ -135,7 +138,6 @@ fun RestaurantCard(
     }
 }
 
-
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun RestaurantCardPreview() {
@@ -146,6 +148,7 @@ private fun RestaurantCardPreview() {
                 .background(Color.Cyan)
         ) {
             RestaurantCard(
+                coverUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
                 title = "Farang",
                 rating = "5.0",
                 tags = ContentUtils.getSampleTagsFew(),
