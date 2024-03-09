@@ -8,4 +8,5 @@ data class HomeContentState(
     val filters: List<TagEntry> = listOf(),
     val restaurants: List<RestaurantEntry> = listOf(),
     val uiLogicState: UiState = UiState.Default,
+    val activeFilters: List<TagEntry> = listOf()
 )
