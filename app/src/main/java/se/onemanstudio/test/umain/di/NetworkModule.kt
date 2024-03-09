@@ -1,6 +1,7 @@
 package se.onemanstudio.test.umain.di
 
 import com.google.gson.GsonBuilder
+import com.skydoves.sandwich.retrofit.adapters.ApiResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +15,7 @@ import se.onemanstudio.test.umain.network.FoodDeliveryService
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val TIMEOUT_60 = 60L
+private const val TIMEOUT = 30L
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -25,10 +26,10 @@ object NetworkModule {
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
-            .connectTimeout(TIMEOUT_60, TimeUnit.SECONDS)
-            .readTimeout(TIMEOUT_60, TimeUnit.SECONDS)
-            .writeTimeout(TIMEOUT_60, TimeUnit.SECONDS)
-            .callTimeout(TIMEOUT_60, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .callTimeout(TIMEOUT, TimeUnit.SECONDS)
             .build()
     }
 
@@ -49,10 +50,12 @@ object NetworkModule {
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(gsonConverterFactory)
+            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideDeliveryService(retrofit: Retrofit): FoodDeliveryService = retrofit.create(FoodDeliveryService::class.java)
+    fun provideDeliveryService(retrofit: Retrofit): FoodDeliveryService =
+        retrofit.create(FoodDeliveryService::class.java)
 }
