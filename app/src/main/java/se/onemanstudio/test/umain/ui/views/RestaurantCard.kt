@@ -143,9 +143,7 @@ fun RestaurantCard(
 private fun RestaurantCardPreview() {
     UmainTheme {
         Box(
-            modifier = Modifier
-                .padding(bottom = 20.dp)
-                .background(Color.Cyan)
+            //modifier = Modifier.padding(bottom = 20.dp).background(Color.Cyan)
         ) {
             RestaurantCard(
                 coverUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
