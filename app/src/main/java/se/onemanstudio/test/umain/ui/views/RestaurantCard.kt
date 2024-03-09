@@ -2,8 +2,6 @@ package se.onemanstudio.test.umain.ui.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +38,6 @@ fun RestaurantCard(
     rating: String,
     tags: List<TagEntry>,
     openTime: String,
-    onClick: () -> Unit = {}
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -60,7 +56,6 @@ fun RestaurantCard(
             .wrapContentHeight()
             .fillMaxWidth()
             .padding(horizontal = 0.dp, vertical = 8.dp)
-            .clickable { onClick() }
     ) {
         Column(
             verticalArrangement = Arrangement.Top,
@@ -142,9 +137,7 @@ fun RestaurantCard(
 @Composable
 private fun RestaurantCardPreview() {
     UmainTheme {
-        Box(
-            //modifier = Modifier.padding(bottom = 20.dp).background(Color.Cyan)
-        ) {
+        Box {
             RestaurantCard(
                 coverUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
                 title = "Farang",
