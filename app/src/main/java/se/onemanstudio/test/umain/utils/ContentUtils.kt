@@ -126,6 +126,7 @@ object ContentUtils {
     fun getSampleRestaurants(): List<RestaurantEntry> {
         return listOf(
             RestaurantEntry(
+                id = "asd",
                 title = "Wayne 'Chad Broski' Burgers",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
                 tags = getSampleTagsFew(),
@@ -135,6 +136,7 @@ object ContentUtils {
             ),
 
             RestaurantEntry(
+                id = "asdasd",
                 title = "Emilia's Fancy Foo",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/meat.png",
                 tags = getSampleTagsSingle(),
@@ -144,6 +146,7 @@ object ContentUtils {
             ),
 
             RestaurantEntry(
+                id = "asdasdasd",
                 title = "Pizzeria Varsha",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/pizza.png",
                 tags = getSampleTagsMany(),
@@ -153,6 +156,7 @@ object ContentUtils {
             ),
 
             RestaurantEntry(
+                id = "asdasdasdasd",
                 title = "Henriks Muddy Water",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/coffee.png",
                 tags = getSampleTagsFew(),
