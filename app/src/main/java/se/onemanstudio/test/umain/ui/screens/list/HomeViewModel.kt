@@ -19,6 +19,8 @@ import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.network.dto.FilterErrorResponse
 import se.onemanstudio.test.umain.repository.FoodDeliveryRepository
 import se.onemanstudio.test.umain.ui.UiState
+import se.onemanstudio.test.umain.ui.screens.list.states.HomeContentState
+import se.onemanstudio.test.umain.ui.screens.list.states.RestaurantDetailsContentState
 import se.onemanstudio.test.umain.utils.ContentUtils
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,8 +30,11 @@ class HomeViewModel @Inject constructor(
     private val foodDeliveryRepository: FoodDeliveryRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeContentState())
-    val uiState: StateFlow<HomeContentState> = _uiState.asStateFlow()
+    private val _uiHomeState = MutableStateFlow(HomeContentState())
+    val uiHomeState: StateFlow<HomeContentState> = _uiHomeState.asStateFlow()
+
+    private val _uiRestaurantDetailsState = MutableStateFlow(RestaurantDetailsContentState())
+    val uiRestaurantDetailsState: StateFlow<RestaurantDetailsContentState> = _uiRestaurantDetailsState.asStateFlow()
 
     private var activeFilters = mutableListOf<TagEntry>()
     private var allRestaurants = mutableListOf<RestaurantEntry>()
@@ -37,7 +42,7 @@ class HomeViewModel @Inject constructor(
     private var allFilterIds = mutableListOf<String>()
 
     init {
-        _uiState.update {
+        _uiHomeState.update {
             it.copy(
                 uiLogicState = UiState.Default
             )
@@ -45,7 +50,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getRestaurants() {
-        _uiState.update {
+        _uiHomeState.update {
             it.copy(
                 uiLogicState = UiState.Loading
             )
@@ -107,9 +112,9 @@ class HomeViewModel @Inject constructor(
                     }
 
                     allFilters = filters
-                    Timber.d("------ FILTERS ------")
+                    //Timber.d("------ FILTERS ------")
                     allFilters.forEach {
-                        Timber.d("Filter ${it.title} has as id ${it.id}")
+                        //Timber.d("Filter ${it.title} has as id ${it.id}")
                     }
 
                     // Now that we have all the info we need for the tags, let's update the list of restaurants with the details of their tags
@@ -128,6 +133,7 @@ class HomeViewModel @Inject constructor(
                         }
                     }
 
+                    /*
                     Timber.d("------ RESTAURANTS ------")
                     allRestaurants.forEach {
                         Timber.d("Restaurant ${it.title} has ${it.tagsInitially.size} tags (${it.tags.size})")
@@ -135,8 +141,9 @@ class HomeViewModel @Inject constructor(
                             Timber.d("--> ${tag.title} - ${tag.id}")
                         }
                     }
+                     */
 
-                    _uiState.update {
+                    _uiHomeState.update {
                         it.copy(
                             uiLogicState = UiState.Content,
                             restaurants = restaurants,
@@ -144,7 +151,75 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                 }
+                .onError {
+                    _uiHomeState.update {
+                        it.copy(uiLogicState = UiState.Error)
+                    }
+                }
+                .onException {
+                    _uiHomeState.update {
+                        it.copy(uiLogicState = UiState.Error)
+                    }
+                }
         }
+    }
+
+    fun getOpenStatus(restaurantId: String) {
+        Timber.d("Getting open status for restaurant with id $restaurantId")
+        viewModelScope.launch {
+            foodDeliveryRepository.getOpenStatusForRestaurant(restaurantId)
+                .suspendOnSuccess {
+                    Timber.d("getOpenStatusForRestaurant - on success")
+                    _uiRestaurantDetailsState.update {
+                        it.copy(
+                            uiLogicState = UiState.Content,
+                            isOpen = data.isCurrentlyOpen!!
+                        )
+                    }
+                }
+                .onError {
+                    Timber.d("getOpenStatusForRestaurant - on error")
+                    _uiRestaurantDetailsState.update {
+                        it.copy(uiLogicState = UiState.Error)
+                    }
+
+                }
+                .onException {
+                    _uiRestaurantDetailsState.update {
+                        it.copy(uiLogicState = UiState.Error)
+                    }
+                }
+        }
+    }
+
+    fun updateActiveFilters(newTag: TagEntry) {
+        if (!activeFilters.contains(newTag)) {
+            activeFilters.add(newTag)
+            //Timber.d("The new tag didn't exist already so I ADDED (+) it to the list ")
+        } else {
+            if (activeFilters.contains(newTag)) {
+                activeFilters.remove(newTag)
+                //Timber.d("The new tag already existed so I REMOVED (-) it to the list")
+            }
+        }
+
+        /*
+        Timber.d("Updated active filters are:")
+        Timber.d("---------------------------------------")
+        activeFilters.forEachIndexed { index, tagEntry ->
+            Timber.d("Filter $index: ${tagEntry.title} - ${tagEntry.id}")
+        }
+        Timber.d("---------------------------------------")
+        */
+
+        _uiHomeState.update {
+            it.copy(
+                uiLogicState = UiState.Content,
+                activeFilters = activeFilters
+            )
+        }
+
+        filterRestaurantsToShow()
     }
 
     private fun filterRestaurantsToShow() {
@@ -158,41 +233,8 @@ class HomeViewModel @Inject constructor(
             }
         }
 
-        _uiState.update {
+        _uiHomeState.update {
             it.copy(uiLogicState = UiState.Content, restaurants = filteredRestaurants)
         }
-    }
-
-    fun updateActiveFilters(newTag: TagEntry) {
-        //Timber.d("I touched ${newTag.title} and the current active filters are:")
-        activeFilters.forEachIndexed { index, tagEntry ->
-            //Timber.d("Filter $index: ${tagEntry.title} - ${tagEntry.id}")
-        }
-
-        if (!activeFilters.contains(newTag)) {
-            activeFilters.add(newTag)
-            Timber.d("The new tag didn't exist already so I ADDED (+) it to the list ")
-        } else {
-            if (activeFilters.contains(newTag)) {
-                activeFilters.remove(newTag)
-                Timber.d("The new tag already existed so I REMOVED (-) it to the list")
-            }
-        }
-
-        Timber.d("Updated active filters are:")
-        Timber.d("---------------------------------------")
-        activeFilters.forEachIndexed { index, tagEntry ->
-            Timber.d("Filter $index: ${tagEntry.title} - ${tagEntry.id}")
-        }
-        Timber.d("---------------------------------------")
-
-        _uiState.update {
-            it.copy(
-                uiLogicState = UiState.Content,
-                activeFilters = activeFilters
-            )
-        }
-
-        filterRestaurantsToShow()
     }
 }
