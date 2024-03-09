@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hilt)
+    kotlin("plugin.serialization")
     kotlin("kapt")
 }
 
@@ -62,12 +63,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "11"
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
     buildFeatures {
@@ -95,16 +100,17 @@ android {
 }
 
 dependencies {
-
     // Core Android magic
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.material3)
+
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
 
     //Retrofit + OkHttp
     implementation(libs.retrofit)
@@ -113,6 +119,10 @@ dependencies {
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp.urlconnection)
     implementation(libs.gson)
+
+    implementation(libs.sandwich.retrofit)
+    implementation(libs.sandwich.retrofit.serialization)
+    implementation(libs.kotlinx.serialization.json)
 
     // DI
     implementation(libs.hilt.android)
