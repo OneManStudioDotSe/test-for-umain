@@ -16,11 +16,9 @@ class OneManApplication : Application() {
     private fun initializeModules() {
         instance = this
 
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
-        Timber.d("The application was created")
     }
 
     companion object {

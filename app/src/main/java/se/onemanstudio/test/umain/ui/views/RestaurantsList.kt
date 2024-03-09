@@ -1,7 +1,6 @@
 package se.onemanstudio.test.umain.ui.views
 
 import android.content.res.Configuration
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -27,8 +26,7 @@ import se.onemanstudio.test.umain.utils.ContentUtils
 fun RestaurantsList(
     modifier: Modifier = Modifier,
     restaurants: List<RestaurantEntry>,
-    onRestaurantSelected: (RestaurantEntry) -> Unit,
-    onItemClick: () -> Unit = {}
+    onItemClick: (RestaurantEntry) -> Unit = {}
 ) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,21 +49,17 @@ fun RestaurantsList(
                     )
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .clickable { onItemClick() },
+                    .clickable { onItemClick(item) },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                val entry = item//restaurants[index]
-
                 RestaurantCard(
-                    coverUrl = entry.promoImageUrl,
-                    title = entry.title,
-                    rating = entry.rating.toString(),
-                    tags = entry.tags,
-                    openTime = entry.openTimeAsText
-                ) {
-                    onRestaurantSelected(entry)
-                }
+                    coverUrl = item.promoImageUrl,
+                    title = item.title,
+                    rating = item.rating.toString(),
+                    tags = item.tags,
+                    openTime = item.openTimeAsText
+                )
             }
         }
     }
@@ -78,7 +72,7 @@ private fun RestaurantsListPreview() {
         Surface {
             RestaurantsList(
                 restaurants = ContentUtils.getSampleRestaurants().subList(0, 2),
-                onRestaurantSelected = {}) { }
+            ) { }
         }
     }
 }
@@ -88,7 +82,7 @@ private fun RestaurantsListPreview() {
 private fun RestaurantsListEmptyPreview() {
     UmainTheme {
         Surface {
-            RestaurantsList(restaurants = listOf(), onRestaurantSelected = {})
+            RestaurantsList(restaurants = listOf())
         }
     }
 }

@@ -28,7 +28,6 @@ import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 import se.onemanstudio.test.umain.utils.ContentUtils
 import se.onemanstudio.test.umain.utils.ViewUtils
-import timber.log.Timber
 
 @Composable
 fun FilterTag(
@@ -37,12 +36,11 @@ fun FilterTag(
     index: Int,
     isSelected: Boolean,
     items: List<TagEntry>,
-    //selectedItemIndex: Int,
     onSelectedChanged: (TagEntry) -> Unit
 ) {
     var selected by remember { mutableStateOf(false) }
     selected = isSelected
-    //Timber.d("For $title, isSelected: $isSelected and selected: $selected")
+
     Box(
         modifier = Modifier
             .height(48.dp)
@@ -61,17 +59,9 @@ fun FilterTag(
             ),
             modifier = Modifier.padding(start = 8.dp, end = 8.dp),
             shape = RoundedCornerShape(16.dp),
-//            selected = if (selectedItemIndex != -1) {
-//                items[selectedItemIndex] == items[index]
-//            } else {
-//                false
-//            },
             selected = selected,
             onClick = {
-                //Timber.d("I clicked on tag ${items[index].title}")
                 selected = !selected
-
-                //selectedItemIndex = index
                 onSelectedChanged(items[index])
             },
             label = {
@@ -107,7 +97,6 @@ private fun FilterTagIdlePreview() {
             index = 0,
             isSelected = false,
             items = ContentUtils.getSampleTagsFew(),
-            //selectedItemIndex = 1,
             onSelectedChanged = {}
         )
     }
@@ -123,7 +112,6 @@ private fun FilterTagSelectedPreview() {
             index = 0,
             isSelected = true,
             items = ContentUtils.getSampleTagsFew(),
-            //selectedItemIndex = 0,
             onSelectedChanged = {}
         )
     }
