@@ -1,6 +1,8 @@
 package se.onemanstudio.test.umain.ui
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,9 +30,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.navigation.NavDestination
 import se.onemanstudio.test.umain.ui.screens.details.DetailsScreen
@@ -74,18 +78,51 @@ fun UmainTestApp(
             ) {
                 composable(route = NavDestination.Home.name) {
                     HomeScreen(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        onRestaurantSelected = {
+                            navController.navigate("details/${it.title}/${it.tagsInitially.toString()}/true")
+                        }
                     )
                 }
 
-                composable(route = NavDestination.Details.name) {
+                composable(
+                    route = NavDestination.Details.name + "/{title}/{subtitle}/{isOpen}",
+                    arguments = listOf(
+                        navArgument("title") { type = NavType.StringType },
+                        navArgument("subtitle") { type = NavType.StringType },
+                        navArgument("isOpen") { type = NavType.BoolType }
+                    ),
+                    enterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                            animationSpec = tween(700)
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                            animationSpec = tween(700)
+                        )
+                    },
+                    popEnterTransition = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down,
+                            animationSpec = tween(700)
+                        )
+                    },
+                    popExitTransition = {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up,
+                            animationSpec = tween(700)
+                        )
+                    }) {
                     DetailsScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(16.dp),
-                        title = "",
-                        subtitle = "",
-                        isOpen = true
+                        title = it.arguments?.getString("title")!!,
+                        subtitle = it.arguments?.getString("subtitle")!!,
+                        isOpen = it.arguments?.getBoolean("isOpen")!!
                     ) {
 
                     }
@@ -119,6 +156,7 @@ fun AppTopBar(
             colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             //modifier = modifier.height(54.dp).fillMaxWidth(),
             actions = {
+                /*
                 Switch(
                     checked = darkTheme,
                     onCheckedChange = onCheckChanged,
@@ -127,6 +165,8 @@ fun AppTopBar(
                         uncheckedThumbColor = MaterialTheme.colorScheme.primary
                     )
                 )
+
+                 */
             },
             navigationIcon = {
                 if (canNavigateBack) {

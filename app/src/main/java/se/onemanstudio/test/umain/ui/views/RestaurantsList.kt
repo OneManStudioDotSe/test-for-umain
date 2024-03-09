@@ -1,11 +1,18 @@
 package se.onemanstudio.test.umain.ui.views
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,26 +22,40 @@ import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 import se.onemanstudio.test.umain.utils.ContentUtils
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RestaurantsList(
     modifier: Modifier = Modifier,
     restaurants: List<RestaurantEntry>,
-    onRestaurantSelected: (RestaurantEntry) -> Unit
+    onRestaurantSelected: (RestaurantEntry) -> Unit,
+    onItemClick: () -> Unit = {}
 ) {
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxHeight()
+            .fillMaxWidth()
     ) {
-        items(restaurants.size) { index ->
+        itemsIndexed(
+            items = restaurants,
+            key = { _, item -> item.id },
+        ) { _, item ->
             Column(
                 modifier = Modifier
+                    .animateItemPlacement(
+                        animationSpec = tween(
+                            durationMillis = 500,
+                            easing = LinearOutSlowInEasing,
+                        )
+                    )
                     .wrapContentHeight()
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .clickable { onItemClick() },
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                val entry = restaurants[index]
+                val entry = item//restaurants[index]
 
                 RestaurantCard(
                     coverUrl = entry.promoImageUrl,
@@ -55,7 +76,9 @@ fun RestaurantsList(
 private fun RestaurantsListPreview() {
     UmainTheme {
         Surface {
-            RestaurantsList(restaurants = ContentUtils.getSampleRestaurants().subList(0, 2)) { }
+            RestaurantsList(
+                restaurants = ContentUtils.getSampleRestaurants().subList(0, 2),
+                onRestaurantSelected = {}) { }
         }
     }
 }

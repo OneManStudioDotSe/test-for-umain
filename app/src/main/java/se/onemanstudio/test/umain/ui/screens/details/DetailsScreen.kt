@@ -5,11 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,10 +32,11 @@ fun DetailsScreen(
     onBackClick: () -> Unit
 ) {
     Box(
+        contentAlignment = Alignment.TopCenter,
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .background(Color.Red)
+            .fillMaxHeight()
+            .background(Color.Red),
     ) {
         Image(
             modifier = Modifier
@@ -46,23 +48,38 @@ fun DetailsScreen(
             alignment = Alignment.TopCenter,
         )
 
-        Image(
+        Box(
+            contentAlignment = Alignment.TopStart,
             modifier = Modifier
-                .padding(start = 39.dp, top = 40.dp)
-                .size(20.dp)
-                .clickable { onBackClick.invoke() },
-            painter = painterResource(id = R.drawable.chevron),
-            contentDescription = "Top left chevron",
-            contentScale = ContentScale.Crop,
-            alignment = Alignment.TopCenter,
-        )
+                .align(Alignment.TopStart)
+                .background(Color.Yellow)
+                .padding(start = 40.dp, top = 40.dp)
+                .size(40.dp)
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Blue)
+                    .clickable { onBackClick.invoke() },
+                painter = painterResource(id = R.drawable.chevron),
+                contentDescription = "Top left chevron",
+                contentScale = ContentScale.Crop,
+                alignment = Alignment.TopCenter,
+            )
+        }
 
-        DetailCard(
-            modifier = Modifier.padding(top = 200.dp),
-            title = title,
-            subtitle = subtitle,
-            isOpen = isOpen
-        )
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+        ) {
+            DetailCard(
+                modifier = Modifier.padding(top = 180.dp),
+                title = title,
+                subtitle = subtitle,
+                isOpen = isOpen
+            )
+        }
     }
 }
 
