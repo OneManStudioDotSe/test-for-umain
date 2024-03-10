@@ -14,7 +14,7 @@ val background = Color(0xFFF8F8F8)
 val surface = Color(0xFFffffff)
 val error = Color(0xFFC0392B)
 
-val filterBackground = Color(0xFFefefef)
+val filterBackground = Color(0xFFFFFFFF)
 
 val primaryContainer = Color(0xFFFFFFFF)
 val secondaryContainer = Color(0xFFFFFFFF)

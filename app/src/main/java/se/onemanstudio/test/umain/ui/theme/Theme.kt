@@ -2,7 +2,6 @@ package se.onemanstudio.test.umain.ui.theme
 
 import android.app.Activity
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -18,7 +17,6 @@ private val LightColorScheme = lightColorScheme(
     background = background,
     surface = surface,
     error = error,
-    //outline = primary,
 
     onSurface = onSurface,
     primaryContainer = primaryContainer,
@@ -47,7 +45,6 @@ fun UmainTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.surface.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
-            window.navigationBarColor = colorScheme.surface.toArgb()
         }
     }
 
