@@ -72,7 +72,7 @@ fun RestaurantCard(
                 placeholder = ViewUtils.debugPlaceholder(R.drawable.storefront_fallback),
                 error = painterResource(R.drawable.storefront_fallback),
                 contentDescription = "Restaurant image",
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.FillWidth,
                 alignment = Alignment.TopCenter,
             )
 

@@ -2,6 +2,7 @@ package se.onemanstudio.test.umain.ui.common.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 import se.onemanstudio.test.umain.utils.ContentUtils
@@ -44,10 +46,16 @@ fun FilterTagsList(
 @Composable
 private fun FilterTagsListPreview() {
     UmainTheme {
-        FilterTagsList(
-            items = ContentUtils.getSampleTagsMany(),
-            onSelectedChanged = {}
-        )
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .wrapContentSize()
+        ) {
+            FilterTagsList(
+                items = ContentUtils.getSampleTagsMany(),
+                onSelectedChanged = {}
+            )
+        }
     }
 }
 

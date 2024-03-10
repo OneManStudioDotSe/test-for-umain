@@ -61,16 +61,17 @@ fun RestaurantDetails(
             contentAlignment = Alignment.TopStart,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(start = 40.dp, top = 40.dp)
+                .padding(start = 24.dp, top = 24.dp)
                 .size(48.dp)
                 .clickable { onBackClick.invoke() }
         ) {
             Image(
-                modifier = Modifier.size(17.dp),
+                modifier = Modifier
+                    .size(18.dp)
+                    .align(Alignment.Center),
                 painter = painterResource(id = R.drawable.icon_chevron_down),
                 contentDescription = "Top left chevron",
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.TopCenter,
+                contentScale = ContentScale.None
             )
         }
 
