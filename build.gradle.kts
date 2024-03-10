@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.versionsCheck) apply false
     alias(libs.plugins.hilt) apply false
-    //alias(libs.plugins.serialization) apply false
     kotlin("plugin.serialization") version "1.9.22" apply false
 }
 
