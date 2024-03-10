@@ -153,7 +153,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getOpenStatus(restaurantId: String) {
-        Timber.d("Getting open status for restaurant with id $restaurantId")
         viewModelScope.launch {
             foodDeliveryRepository.getOpenStatusForRestaurant(restaurantId)
                 .suspendOnSuccess {
@@ -165,7 +164,6 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 .onError {
-                    Timber.d("getOpenStatusForRestaurant - on error")
                     _uiRestaurantDetailsState.update {
                         it.copy(uiLogicState = UiState.Error)
                     }

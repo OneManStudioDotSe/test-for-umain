@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package se.onemanstudio.test.umain.ui.screens.home
 
 import android.content.res.Configuration
@@ -5,9 +7,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,10 +47,11 @@ import se.onemanstudio.test.umain.ui.common.views.FilterTagsList
 import se.onemanstudio.test.umain.ui.common.views.RestaurantDetails
 import se.onemanstudio.test.umain.ui.common.views.RestaurantsList
 import se.onemanstudio.test.umain.ui.screens.home.states.HomeContentState
+import se.onemanstudio.test.umain.ui.screens.home.states.RestaurantDetailsContentState
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 import se.onemanstudio.test.umain.utils.ContentUtils
-import timber.log.Timber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -55,19 +62,30 @@ fun HomeScreen(
     }
 
     val uiHomeState by contentViewModel.uiHomeState.collectAsState()
+    val uiRestaurantDetailsState by contentViewModel.uiRestaurantDetailsState.collectAsState()
 
+    val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     var selectedRestaurant by remember { mutableStateOf<RestaurantEntry?>(null) }
 
-    if (showSheet) {
-        if (selectedRestaurant != null) {
-            BottomSheetWithRestaurantDetails(
-                contentViewModel = contentViewModel,
-                restaurant = selectedRestaurant!!
-            ) {
-                showSheet = false
-            }
+    if (showSheet && selectedRestaurant != null) {
+        LaunchedEffect(Unit) {
+            contentViewModel.getOpenStatus(selectedRestaurant!!.id)
         }
+
+        BottomSheet(
+            restaurant = selectedRestaurant!!,
+            showSheet = showSheet,
+            uiRestaurantDetailsState = uiRestaurantDetailsState,
+            onDismissRequest = {
+                showSheet = false
+                scope.launch {
+                    bottomSheetState.hide()
+                }
+            }
+        )
     }
 
     Surface {
@@ -78,7 +96,11 @@ fun HomeScreen(
                     uiHomeState = uiHomeState,
                     onRestaurantClicked = {
                         selectedRestaurant = it
+
                         showSheet = true
+                        scope.launch {
+                            bottomSheetState.show()
+                        }
                     },
                     onFilterSelected = {
                         contentViewModel.updateActiveFilters(it)
@@ -88,12 +110,11 @@ fun HomeScreen(
 
             UiState.Loading -> LoadingView()
             UiState.Error -> ErrorView()
-            UiState.Default -> {
-                //Here we could show a marketing image the first we start the app or something similar
-            }
+            UiState.Default -> {}
         }
     }
 }
+
 
 @Composable
 fun HomeContent(
@@ -140,64 +161,59 @@ fun HomeContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheetWithRestaurantDetails(
-    contentViewModel: HomeViewModel,
+fun BottomSheet(
+    showSheet: Boolean,
+    uiRestaurantDetailsState: RestaurantDetailsContentState,
     restaurant: RestaurantEntry,
-    onDismiss: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
-    LaunchedEffect(Unit) {
-        contentViewModel.getOpenStatus(restaurant.id)
-    }
-
     val scope = rememberCoroutineScope()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val uiRestaurantDetailsState by contentViewModel.uiRestaurantDetailsState.collectAsState()
+    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
-    ModalBottomSheet(
-        modifier = Modifier,
-        sheetState = sheetState,
-        onDismissRequest = { },
-        shape = RoundedCornerShape(
-            topStart = 0.dp,
-            topEnd = 0.dp
-        ),
-        dragHandle = null,
-    ) {
-        when (uiRestaurantDetailsState.uiLogicState) {
-            UiState.Content -> {
-                Timber.d("At content")
-                RestaurantDetails(
-                    restaurant = restaurant,
-                    isLoadingCompleted = true
-                ) {
-                    scope.launch {
-                        if (sheetState.isVisible) {
-                            sheetState.hide()
-                            onDismiss()
+    if (showSheet) {
+        ModalBottomSheet(
+            modifier = Modifier,
+            sheetState = sheetState,
+            onDismissRequest = onDismissRequest,
+            shape = RoundedCornerShape(
+                topStart = 0.dp,
+                topEnd = 0.dp
+            ),
+            dragHandle = null,
+            windowInsets = WindowInsets.displayCutout,
+        ) {
+            Column(modifier = Modifier.padding(bottom = bottomPadding)) {
+                when (uiRestaurantDetailsState.uiLogicState) {
+                    UiState.Content -> {
+                        RestaurantDetails(
+                            restaurant = restaurant,
+                            isLoadingCompleted = true
+                        ) {
+                            scope.launch {
+                                if (sheetState.isVisible) {
+                                    sheetState.hide()
+                                    onDismissRequest()
+                                }
+                            }
                         }
                     }
-                }
-            }
 
-            UiState.Loading -> {
-                Timber.d("At loading")
-                RestaurantDetails(
-                    restaurant = restaurant,
-                    isLoadingCompleted = false
-                ) {
-                    scope.launch {
-                        if (sheetState.isVisible) {
-                            sheetState.hide()
-                            onDismiss()
+                    UiState.Loading -> {
+                        RestaurantDetails(
+                            restaurant = restaurant,
+                            isLoadingCompleted = false
+                        ) {
+                            onDismissRequest()
                         }
                     }
+
+                    UiState.Default -> {}
+                    UiState.Error -> {}
                 }
             }
-
-            UiState.Default -> {}
-            UiState.Error -> {}
         }
     }
 }
@@ -228,13 +244,11 @@ private fun ErrorView() {
                 text = context.getString(R.string.an_error_occurred),
                 style = MaterialTheme.typography.labelMedium
             )
-
-            Spacer(modifier = Modifier.height(14.dp))
         }
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 600)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 800)
 @Composable
 private fun HomeScreenPreview() {
     UmainTheme {
@@ -245,7 +259,27 @@ private fun HomeScreenPreview() {
                     filters = ContentUtils.getSampleTagsMany(),
                     restaurants = ContentUtils.getSampleRestaurants().subList(0, 2),
                     activeFilters = ContentUtils.getSampleTagsMany()
-                )
+                ),
+                onRestaurantClicked = {},
+                onFilterSelected = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 800)
+@Composable
+private fun BottomSheetPreview() {
+    UmainTheme {
+        Surface {
+            BottomSheet(
+                showSheet = true,
+                uiRestaurantDetailsState = RestaurantDetailsContentState(
+                    uiLogicState = UiState.Content,
+                    isOpen = true
+                ),
+                restaurant = ContentUtils.getSampleRestaurants()[0],
+                onDismissRequest = {}
             )
         }
     }

@@ -4,7 +4,6 @@ import se.onemanstudio.test.OneManApplication
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
-import timber.log.Timber
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
