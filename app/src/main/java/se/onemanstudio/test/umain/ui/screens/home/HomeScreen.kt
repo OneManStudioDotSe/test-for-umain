@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package se.onemanstudio.test.umain.ui.screens.home
 
 import android.content.res.Configuration

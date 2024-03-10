@@ -108,7 +108,7 @@ in order to demonstrate a "healthy" project:
   used, the down chevron, I took the creative liberty to assume that the details of a restaurant
   would be shown on a bottom sheet, which is what I also implemented.
 - The colors of the background of the filter tags were using transparency (#FFFFFF )thus making the extraction
-  of the color not straightforward and fully compatible with a standarized Material theme so I had
+  of the color not straightforward and fully compatible with a standardised Material theme so I had
   to use specific color values
   <br>
   <br>

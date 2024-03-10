@@ -1,7 +1,6 @@
 [versions]
 coreKtx = "1.12.0"
 hiltNavigationCompose = "1.2.0"
-kotlinxSerializationJson = "1.6.3"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
 
@@ -15,7 +14,6 @@ loggingInterceptor = "4.12.0"
 okhttpUrlconnection = "4.12.0"
 retrofit = "2.9.0"
 converterGson = "2.9.0"
-gson = "2.10.1"
 
 hiltAndroid = "2.51"
 hiltCompiler = "2.51"
@@ -30,7 +28,6 @@ agp = "8.3.0"
 kotlin = "1.9.22"
 pluginHiltAndroid = "2.51"
 versionsCheck = "0.51.0"
-serialization = "1.9.22"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

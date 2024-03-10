@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.network.dto.FilterErrorResponse
+import se.onemanstudio.test.umain.network.dto.OpenStatusErrorResponse
 import se.onemanstudio.test.umain.repository.FoodDeliveryRepository
 import se.onemanstudio.test.umain.ui.common.UiState
 import se.onemanstudio.test.umain.ui.screens.home.states.HomeContentState
@@ -164,6 +165,9 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 .onError {
+                    onErrorDeserialize<String, OpenStatusErrorResponse> { errorMessage ->
+                        Timber.e("getOpenStatus - Status code: $statusCode -> ${statusCode.code} and error: ${errorMessage.error}, reason: ${errorMessage.reason}")
+                    }
                     _uiRestaurantDetailsState.update {
                         it.copy(uiLogicState = UiState.Error)
                     }
