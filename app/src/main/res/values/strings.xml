@@ -1,14 +1,17 @@
 <resources>
-    <string name="app_name">Umain</string>
+    <string name="app_name">Umain Test</string>
 
     <string name="open">Open</string>
     <string name="closed">Closed</string>
 
     <string name="delivery_in_days">Way too long</string>
+    <string name="delivery_in_hour">1 hour</string>
     <string name="delivery_in_hours">%1$s hours</string>
     <string name="delivery_in_mins">%1$s mins</string>
     <string name="delivery_in_min">1 min</string>
 
     <string name="try_again">Try again</string>
     <string name="an_error_occurred">An error occurred. Please try again.</string>
+
+    <string name="no_restaurants_found">No restaurants were found.</string>
 </resources>
