@@ -107,6 +107,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.material3)
 
+    // Compose magic
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui.ui)
     implementation(libs.androidx.ui.graphics)
@@ -114,15 +115,12 @@ dependencies {
 
     //Retrofit + OkHttp
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.sandwich)
+    implementation(libs.retrofit.sandwich.serialization)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logginginterceptor)
     implementation(libs.okhttp.urlconnection)
-    implementation(libs.gson)
-
-    implementation(libs.sandwich.retrofit)
-    implementation(libs.sandwich.retrofit.serialization)
-    implementation(libs.kotlinx.serialization.json)
 
     // DI
     implementation(libs.hilt.android)
