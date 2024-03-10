@@ -64,15 +64,16 @@ val Typography = Typography(
         lineHeight = 20.sp,
     ),
 
-    //footer1
+    //footer1 -  Medium
     labelLarge = TextStyle(
         fontFamily = interFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 10.sp,
         lineHeight = 12.sp,
+        color = footer
     ),
 
-    //footer1
+    //footer1 - Bold
     labelSmall = TextStyle(
         fontFamily = interFamily,
         fontWeight = FontWeight.Bold,

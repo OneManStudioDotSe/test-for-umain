@@ -1,7 +1,8 @@
-package se.onemanstudio.test.umain.ui.views
+package se.onemanstudio.test.umain.ui.common.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,10 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
@@ -40,12 +43,8 @@ fun RestaurantCard(
     openTime: String,
 ) {
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(
             topEnd = 12.dp,
             topStart = 12.dp,
@@ -64,12 +63,16 @@ fun RestaurantCard(
             AsyncImage(
                 modifier = Modifier
                     .height(132.dp)
-                    .fillMaxWidth(),
-                model = coverUrl,
-                placeholder = ViewUtils.debugPlaceholder(R.drawable.restaurant_sample_image),
-                //TODO: set the error and fallback images
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(coverUrl)
+                    .crossfade(true)
+                    .build(),
+                placeholder = ViewUtils.debugPlaceholder(R.drawable.storefront_fallback),
+                error = painterResource(R.drawable.storefront_fallback),
                 contentDescription = "Restaurant image",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.Fit,
                 alignment = Alignment.TopCenter,
             )
 
@@ -86,7 +89,8 @@ fun RestaurantCard(
 
                     Text(
                         text = ContentUtils.convertTagsIntoSingleString(tags),
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.labelMedium,
+                        color = se.onemanstudio.test.umain.ui.theme.secondary
                     )
 
                     Spacer(modifier = Modifier.height(2.dp))
@@ -96,7 +100,7 @@ fun RestaurantCard(
                             modifier = Modifier
                                 .padding(end = 3.dp)
                                 .size(10.dp),
-                            painter = painterResource(id = R.drawable.clock_icon),
+                            painter = painterResource(id = R.drawable.icon_clock),
                             contentDescription = "",
                         )
 
@@ -118,7 +122,7 @@ fun RestaurantCard(
                             modifier = Modifier
                                 .padding(end = 3.dp)
                                 .size(10.dp),
-                            painter = painterResource(id = R.drawable.star_icon),
+                            painter = painterResource(id = R.drawable.icon_star),
                             contentDescription = "",
                         )
 
@@ -137,7 +141,12 @@ fun RestaurantCard(
 @Composable
 private fun RestaurantCardPreview() {
     UmainTheme {
-        Box {
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .wrapContentHeight()
+        ) {
             RestaurantCard(
                 coverUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
                 title = "Farang",
@@ -145,8 +154,6 @@ private fun RestaurantCardPreview() {
                 tags = ContentUtils.getSampleTagsFew(),
                 openTime = "30 mins"
             )
-            Spacer(modifier = Modifier.height(20.dp))
         }
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }

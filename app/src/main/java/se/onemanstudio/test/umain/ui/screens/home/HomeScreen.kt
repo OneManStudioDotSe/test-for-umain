@@ -1,4 +1,4 @@
-package se.onemanstudio.test.umain.ui.screens.list
+package se.onemanstudio.test.umain.ui.screens.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -37,11 +35,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
-import se.onemanstudio.test.umain.ui.UiState
+import se.onemanstudio.test.umain.models.TagEntry
+import se.onemanstudio.test.umain.ui.common.UiState
+import se.onemanstudio.test.umain.ui.common.views.FilterTagsList
+import se.onemanstudio.test.umain.ui.common.views.RestaurantDetails
+import se.onemanstudio.test.umain.ui.common.views.RestaurantsList
+import se.onemanstudio.test.umain.ui.screens.home.states.HomeContentState
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.ui.views.FilterTagsList
-import se.onemanstudio.test.umain.ui.views.RestaurantDetails
-import se.onemanstudio.test.umain.ui.views.RestaurantsList
 import se.onemanstudio.test.umain.utils.ContentUtils
 import timber.log.Timber
 
@@ -50,8 +50,6 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     contentViewModel: HomeViewModel = hiltViewModel()
 ) {
-    Timber.d("HomeScreen recomposed")
-
     LaunchedEffect(Unit) {
         contentViewModel.getRestaurants()
     }
@@ -59,13 +57,11 @@ fun HomeScreen(
     val uiHomeState by contentViewModel.uiHomeState.collectAsState()
 
     var showSheet by remember { mutableStateOf(false) }
-    var selectedRestaurant by remember {
-        mutableStateOf<RestaurantEntry?>(null)
-    }
+    var selectedRestaurant by remember { mutableStateOf<RestaurantEntry?>(null) }
 
     if (showSheet) {
         if (selectedRestaurant != null) {
-            BottomSheet(
+            BottomSheetWithRestaurantDetails(
                 contentViewModel = contentViewModel,
                 restaurant = selectedRestaurant!!
             ) {
@@ -77,52 +73,74 @@ fun HomeScreen(
     Surface {
         when (uiHomeState.uiLogicState) {
             UiState.Content -> {
-                Column(
+                HomeContent(
                     modifier = modifier,
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(
-                        modifier = Modifier
-                            .height(16.dp)
-                            .fillMaxWidth()
-                    )
-                    FilterTagsList(
-                        items = uiHomeState.filters,
-                        onSelectedChanged = {
-                            Timber.d("Filter <${it.title}> was clicked")
-                            contentViewModel.updateActiveFilters(it)
-                        })
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                    ) {
-                        RestaurantsList(
-                            modifier = Modifier
-                                .wrapContentSize()
-                                .padding(horizontal = 16.dp),
-                            restaurants = uiHomeState.restaurants,
-                        ) {
-                            Timber.d("I clicked on restaurant ${it.title}")
-                            selectedRestaurant = it
-                            showSheet = true
-                        }
+                    uiHomeState = uiHomeState,
+                    onRestaurantClicked = {
+                        selectedRestaurant = it
+                        showSheet = true
+                    },
+                    onFilterSelected = {
+                        contentViewModel.updateActiveFilters(it)
                     }
-                }
+                )
             }
 
             UiState.Loading -> LoadingView()
             UiState.Error -> ErrorView()
-            UiState.Default -> {}
+            UiState.Default -> {
+                //Here we could show a marketing image the first we start the app or something similar
+            }
         }
+    }
+}
+
+@Composable
+fun HomeContent(
+    modifier: Modifier = Modifier,
+    uiHomeState: HomeContentState,
+    onRestaurantClicked: (RestaurantEntry) -> Unit = {},
+    onFilterSelected: (TagEntry) -> Unit = {}
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(
+            modifier = Modifier
+                .height(22.dp)
+                .fillMaxWidth()
+        )
+
+        FilterTagsList(
+            items = uiHomeState.filters,
+            onSelectedChanged = { onFilterSelected(it) }
+        )
+
+        Spacer(
+            modifier = Modifier
+                .height(14.dp)
+                .fillMaxWidth()
+        )
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            RestaurantsList(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(horizontal = 16.dp),
+                restaurants = uiHomeState.restaurants,
+            ) {
+                onRestaurantClicked(it)
+            }
+        }
+
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomSheet(
+fun BottomSheetWithRestaurantDetails(
     contentViewModel: HomeViewModel,
     restaurant: RestaurantEntry,
     onDismiss: () -> Unit
@@ -151,10 +169,9 @@ fun BottomSheet(
             UiState.Content -> {
                 Timber.d("At content")
                 RestaurantDetails(
-                    title = restaurant.title,
+                    restaurant = restaurant,
                     isLoadingCompleted = true
                 ) {
-                    Timber.d("onBackClick")
                     scope.launch {
                         if (sheetState.isVisible) {
                             sheetState.hide()
@@ -167,10 +184,9 @@ fun BottomSheet(
             UiState.Loading -> {
                 Timber.d("At loading")
                 RestaurantDetails(
-                    title = restaurant.title,
+                    restaurant = restaurant,
                     isLoadingCompleted = false
                 ) {
-                    Timber.d("onBackClick")
                     scope.launch {
                         if (sheetState.isVisible) {
                             sheetState.hide()
@@ -182,7 +198,6 @@ fun BottomSheet(
 
             UiState.Default -> {}
             UiState.Error -> {}
-
         }
     }
 }
@@ -215,34 +230,28 @@ private fun ErrorView() {
             )
 
             Spacer(modifier = Modifier.height(14.dp))
-
-            Button(
-                onClick = {
-                    Timber.d("I should try again")
-                }) {
-                Text(
-                    text = context.getString(R.string.try_again),
-                    style = MaterialTheme.typography.titleSmall
-                )
-            }
         }
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 800)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 600)
 @Composable
 private fun HomeScreenPreview() {
     UmainTheme {
         Surface {
-            Column {
-                FilterTagsList(items = ContentUtils.getSampleTagsMany())
-                RestaurantsList(restaurants = ContentUtils.getSampleRestaurants().subList(0, 2))
-            }
+            HomeContent(
+                uiHomeState = HomeContentState(
+                    uiLogicState = UiState.Content,
+                    filters = ContentUtils.getSampleTagsMany(),
+                    restaurants = ContentUtils.getSampleRestaurants().subList(0, 2),
+                    activeFilters = ContentUtils.getSampleTagsMany()
+                )
+            )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 200)
 @Composable
 private fun ErrorViewPreview() {
     UmainTheme {
@@ -252,7 +261,7 @@ private fun ErrorViewPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 200)
 @Composable
 private fun HomeViewLoadingPreview() {
     UmainTheme {

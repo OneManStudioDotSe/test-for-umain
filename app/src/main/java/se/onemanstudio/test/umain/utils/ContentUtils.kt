@@ -17,15 +17,23 @@ object ContentUtils {
 
         min.toComponents { days, hours, minutes, _, _ ->
             // Ignore seconds and nanoseconds
-            Timber.d("Delivery in $days days, $hours hours, and $minutes minutes ($amount)")
+            //Timber.d("Delivery in $days days, $hours hours, and $minutes minutes ($amount)")
 
             if (days >= 1) {
                 return context.getString(R.string.delivery_in_days)
             } else {
                 if (hours >= 1) {
-                    return String.format(context.getString(R.string.delivery_in_hours), hours)
+                    if (hours == 1) {
+                        return context.getString(R.string.delivery_in_hour)
+                    } else {
+                        return String.format(context.getString(R.string.delivery_in_hours), hours)
+                    }
                 } else {
-                    return String.format(context.getString(R.string.delivery_in_mins), minutes)
+                    if (minutes > 1) {
+                        return String.format(context.getString(R.string.delivery_in_mins), minutes)
+                    } else {
+                        return context.getString(R.string.delivery_in_min)
+                    }
                 }
             }
         }
@@ -38,7 +46,7 @@ object ContentUtils {
     private fun getSampleTagsSingle(): List<TagEntry> {
         return listOf(
             TagEntry(
-                id = "asd",
+                id = "id1",
                 title = "Top Rated",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_food.png",
             )
@@ -48,19 +56,19 @@ object ContentUtils {
     fun getSampleTagsFew(): List<TagEntry> {
         return listOf(
             TagEntry(
-                id = "asd",
+                id = "id2",
                 title = "Top Rated",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_food.png",
             ),
 
             TagEntry(
-                id = "fgh",
+                id = "id3",
                 title = "Take Out",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_take_out.png",
             ),
 
             TagEntry(
-                id = "jkl",
+                id = "id4",
                 title = "Fast Delivery",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_delivery.png",
             )
@@ -70,37 +78,37 @@ object ContentUtils {
     fun getSampleTagsMany(): List<TagEntry> {
         return listOf(
             TagEntry(
-                id = "asd",
+                id = "id1",
                 title = "Fast Food",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_food.png",
             ),
 
             TagEntry(
-                id = "fgh",
+                id = "id2",
                 title = "Take Out",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_take_out.png",
             ),
 
             TagEntry(
-                id = "jkl",
-                title = "Fast Delivery",
-                tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_delivery.png",
-            ),
-
-            TagEntry(
-                id = "qwe",
+                id = "id3",
                 title = "Top Rated",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
             ),
 
             TagEntry(
-                id = "rty",
+                id = "id4",
+                title = "Fast Delivery",
+                tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_delivery.png",
+            ),
+
+            TagEntry(
+                id = "id5",
                 title = "Take Out 2",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_take_out.png",
             ),
 
             TagEntry(
-                id = "uio",
+                id = "id6",
                 title = "Fast Food 2",
                 tagImageUrl = "https://food-delivery.umain.io/images/filter/filter_fast_food.png",
             )
@@ -110,7 +118,7 @@ object ContentUtils {
     fun getSampleRestaurants(): List<RestaurantEntry> {
         return listOf(
             RestaurantEntry(
-                id = "asd",
+                id = "id1",
                 title = "Wayne 'Chad Broski' Burgers",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
                 tags = getSampleTagsFew(),
@@ -120,7 +128,7 @@ object ContentUtils {
             ),
 
             RestaurantEntry(
-                id = "someId",
+                id = "id2",
                 title = "Emilia's Fancy Foo",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/meat.png",
                 tags = getSampleTagsSingle(),
@@ -130,7 +138,7 @@ object ContentUtils {
             ),
 
             RestaurantEntry(
-                id = "someId",
+                id = "id3",
                 title = "Pizzeria Varsha",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/pizza.png",
                 tags = getSampleTagsMany(),
@@ -140,7 +148,7 @@ object ContentUtils {
             ),
 
             RestaurantEntry(
-                id = "someId",
+                id = "id4",
                 title = "Henriks Muddy Water",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/coffee.png",
                 tags = getSampleTagsFew(),

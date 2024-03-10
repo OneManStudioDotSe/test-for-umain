@@ -1,8 +1,8 @@
-package se.onemanstudio.test.umain.ui.screens.list.states
+package se.onemanstudio.test.umain.ui.screens.home.states
 
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
-import se.onemanstudio.test.umain.ui.UiState
+import se.onemanstudio.test.umain.ui.common.UiState
 
 data class HomeContentState(
     val uiLogicState: UiState = UiState.Default,

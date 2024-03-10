@@ -1,4 +1,4 @@
-package se.onemanstudio.test.umain.ui.screens.list
+package se.onemanstudio.test.umain.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,9 +18,9 @@ import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.network.dto.FilterErrorResponse
 import se.onemanstudio.test.umain.repository.FoodDeliveryRepository
-import se.onemanstudio.test.umain.ui.UiState
-import se.onemanstudio.test.umain.ui.screens.list.states.HomeContentState
-import se.onemanstudio.test.umain.ui.screens.list.states.RestaurantDetailsContentState
+import se.onemanstudio.test.umain.ui.common.UiState
+import se.onemanstudio.test.umain.ui.screens.home.states.HomeContentState
+import se.onemanstudio.test.umain.ui.screens.home.states.RestaurantDetailsContentState
 import se.onemanstudio.test.umain.utils.ContentUtils
 import timber.log.Timber
 import javax.inject.Inject
@@ -63,7 +63,6 @@ class HomeViewModel @Inject constructor(
             // Get all the restaurants and store them at 'restaurants'
             foodDeliveryRepository.getRestaurants()
                 .suspendOnSuccess {
-                    Timber.d("getRestaurants - on success")
                     // Store locally all the different tags that we come across
                     data.restaurants.forEach {
                         restaurants.add(
@@ -83,16 +82,10 @@ class HomeViewModel @Inject constructor(
 
                     allRestaurants = restaurants
 
-                    Timber.d("------ RESTAURANTS ------")
-                    allRestaurants.forEach {
-                        Timber.d("Restaurant ${it.title} has ${it.tagsInitially.size} tags (${it.tags.size})")
-                    }
-
                     // For each of the tags, fetch its info and store all their info at 'filters'
                     allFilterIds.distinct().forEach { item ->
                         foodDeliveryRepository.getFilterDetails(item)
                             .suspendOnSuccess {
-                                Timber.d("getFilterDetails - on success for $item which has as title <${data.name}> and id ${data.id}")
                                 filters.add(
                                     TagEntry(
                                         id = data.id!!,
@@ -112,10 +105,6 @@ class HomeViewModel @Inject constructor(
                     }
 
                     allFilters = filters
-                    //Timber.d("------ FILTERS ------")
-                    allFilters.forEach {
-                        //Timber.d("Filter ${it.title} has as id ${it.id}")
-                    }
 
                     // Now that we have all the info we need for the tags, let's update the list of restaurants with the details of their tags
                     allRestaurants.forEach { restaurant ->
@@ -129,7 +118,6 @@ class HomeViewModel @Inject constructor(
                             }
 
                             restaurant.tags = tagsWithDetails //TODO: This is bad. Make all of RestaurantEntry immutable
-                            //Timber.d("Restaurant ${restaurant.title} will have ${restaurant.tags.size} tags")
                         }
                     }
 
@@ -169,7 +157,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             foodDeliveryRepository.getOpenStatusForRestaurant(restaurantId)
                 .suspendOnSuccess {
-                    Timber.d("getOpenStatusForRestaurant - on success")
                     _uiRestaurantDetailsState.update {
                         it.copy(
                             uiLogicState = UiState.Content,
@@ -195,11 +182,9 @@ class HomeViewModel @Inject constructor(
     fun updateActiveFilters(newTag: TagEntry) {
         if (!activeFilters.contains(newTag)) {
             activeFilters.add(newTag)
-            //Timber.d("The new tag didn't exist already so I ADDED (+) it to the list ")
         } else {
             if (activeFilters.contains(newTag)) {
                 activeFilters.remove(newTag)
-                //Timber.d("The new tag already existed so I REMOVED (-) it to the list")
             }
         }
 

@@ -1,4 +1,4 @@
-package se.onemanstudio.test.umain.ui.views
+package se.onemanstudio.test.umain.ui.common.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.height

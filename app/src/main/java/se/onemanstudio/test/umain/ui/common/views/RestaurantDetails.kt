@@ -1,7 +1,8 @@
-package se.onemanstudio.test.umain.ui.views
+package se.onemanstudio.test.umain.ui.common.views
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,20 +11,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import se.onemanstudio.test.umain.R
+import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
+import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.ViewUtils
 
 @Composable
 fun RestaurantDetails(
+    restaurant: RestaurantEntry,
     modifier: Modifier = Modifier,
-    title: String,
     isLoadingCompleted: Boolean,
     onBackClick: () -> Unit
 ) {
@@ -33,11 +41,17 @@ fun RestaurantDetails(
             .fillMaxWidth()
             .fillMaxHeight(),
     ) {
-        Image(
+        AsyncImage(
             modifier = Modifier
                 .height(220.dp)
-                .fillMaxWidth(),
-            painter = painterResource(id = R.drawable.restaurant_sample_image),
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondary),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(restaurant.promoImageUrl)
+                .crossfade(true)
+                .build(),
+            placeholder = ViewUtils.debugPlaceholder(R.drawable.storefront_fallback),
+            error = painterResource(R.drawable.storefront_fallback),
             contentDescription = "Restaurant image",
             contentScale = ContentScale.Crop,
             alignment = Alignment.TopCenter,
@@ -53,7 +67,7 @@ fun RestaurantDetails(
         ) {
             Image(
                 modifier = Modifier.size(17.dp),
-                painter = painterResource(id = R.drawable.chevron),
+                painter = painterResource(id = R.drawable.icon_chevron_down),
                 contentDescription = "Top left chevron",
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.TopCenter,
@@ -67,9 +81,10 @@ fun RestaurantDetails(
         ) {
             DetailCard(
                 modifier = Modifier.padding(top = 180.dp),
-                title = title,
+                title = restaurant.title,
+                subtitle = ContentUtils.convertTagsIntoSingleString(restaurant.tags),
                 isLoadingCompleted = isLoadingCompleted,
-                isOpen = true
+                isOpen = false
             )
         }
     }
@@ -80,8 +95,16 @@ fun RestaurantDetails(
 private fun DetailsScreenPreview() {
     UmainTheme {
         RestaurantDetails(
-            title = "Restaurant's title",
-            isLoadingCompleted = true,
+            restaurant = RestaurantEntry(
+                id = "id",
+                title = "Restaurant's title",
+                promoImageUrl = "https://food-delivery.umain.io/images/restaurant/coffee.png",
+                tags = ContentUtils.getSampleTagsFew(),
+                tagsInitially = listOf("tagId1", "tagId2", "tagId3"),
+                rating = 5.0,
+                openTimeAsText = "Open",
+            ),
+            isLoadingCompleted = false,
             onBackClick = {})
     }
 }

@@ -1,4 +1,4 @@
-package se.onemanstudio.test.umain.ui.views
+package se.onemanstudio.test.umain.ui.common.views
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.LinearEasing
@@ -40,6 +40,7 @@ import se.onemanstudio.test.umain.utils.ContentUtils
 fun DetailCard(
     modifier: Modifier = Modifier,
     title: String,
+    subtitle: String,
     isLoadingCompleted: Boolean,
     isOpen: Boolean
 ) {
@@ -68,7 +69,7 @@ fun DetailCard(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 modifier = Modifier.wrapContentSize(),
-                text = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsFew()),
+                text = subtitle,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodySmall
@@ -95,7 +96,6 @@ fun ComponentRectangleLineShort(isLoadingCompleted: Boolean) {
             .clip(shape = RoundedCornerShape(4.dp))
             .background(color = Color.LightGray)
             .size(height = 35.dp, width = 100.dp)
-            .padding(vertical = 6.dp)
             .shimmerLoadingAnimation(isLoadingCompleted)
     )
 }
@@ -157,6 +157,7 @@ private fun DetailCardLoadingPreview() {
         Box {
             DetailCard(
                 title = "Emilia's Fancy Food",
+                subtitle = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsFew()),
                 isLoadingCompleted = false,
                 isOpen = true
             )
@@ -171,6 +172,7 @@ private fun DetailCardWithWeirdContentPreview() {
         Box {
             DetailCard(
                 title = "Emilia's Fancy Food With More And More Food And More Food",
+                subtitle = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsMany()),
                 isLoadingCompleted = true,
                 isOpen = false
             )
