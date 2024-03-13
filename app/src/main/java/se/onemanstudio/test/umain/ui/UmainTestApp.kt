@@ -34,13 +34,12 @@ import se.onemanstudio.test.umain.ui.theme.UmainTheme
 fun UmainTestApp(
     navController: NavHostController = rememberNavController()
 ) {
-    // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(
-            containerColor = Color.DarkGray,
+            contentColor = MaterialTheme.colorScheme.background,
             topBar = { AppTopBar() }
         ) { innerPadding ->
             NavHost(
@@ -71,7 +70,9 @@ fun AppTopBar() {
         colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = se.onemanstudio.test.umain.ui.theme.surface),
         navigationIcon = {
             Icon(
-                modifier = Modifier.wrapContentWidth().padding(start = 4.dp),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .padding(start = 4.dp),
                 painter = painterResource(id = R.drawable.logo_umain),
                 contentDescription = null
             )
@@ -83,14 +84,18 @@ fun AppTopBar() {
 @Composable
 private fun AppTopBarPreview() {
     UmainTheme {
-        Surface {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
             Scaffold(
                 topBar = { AppTopBar() },
                 content = { innerPadding ->
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
                             .padding(innerPadding)
+                            .fillMaxSize()
+                            .padding(16.dp)
                     ) {
                         Text(
                             text = "Your content will be here",

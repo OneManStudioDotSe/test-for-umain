@@ -42,7 +42,7 @@ fun DetailCard(
     title: String,
     subtitle: String,
     isLoadingCompleted: Boolean,
-    isOpen: Boolean
+    isOpen: Boolean?
 ) {
     Card(
         modifier = modifier

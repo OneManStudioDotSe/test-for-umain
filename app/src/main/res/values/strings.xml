@@ -3,6 +3,7 @@
 
     <string name="open">Open</string>
     <string name="closed">Closed</string>
+    <string name="unknown">---</string>
 
     <string name="delivery_in_days">Way too long</string>
     <string name="delivery_in_hour">1 hour</string>

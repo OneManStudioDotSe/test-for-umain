@@ -60,7 +60,7 @@ fun HomeScreen(
     }
 
     val uiHomeState by contentViewModel.uiHomeState.collectAsState()
-    val uiRestaurantDetailsState by contentViewModel.uiRestaurantDetailsState.collectAsState()
+    val uiDetailsState by contentViewModel.uiRestaurantDetailsState.collectAsState()
 
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
@@ -76,7 +76,7 @@ fun HomeScreen(
         BottomSheet(
             restaurant = selectedRestaurant!!,
             showSheet = showSheet,
-            uiRestaurantDetailsState = uiRestaurantDetailsState,
+            uiRestaurantDetailsState = uiDetailsState,
             onDismissRequest = {
                 showSheet = false
                 scope.launch {
@@ -169,8 +169,6 @@ fun BottomSheet(
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-
     if (showSheet) {
         ModalBottomSheet(
             modifier = Modifier,
@@ -183,12 +181,17 @@ fun BottomSheet(
             dragHandle = null,
             windowInsets = WindowInsets.displayCutout,
         ) {
-            Column(modifier = Modifier.padding(bottom = bottomPadding)) {
+            Column(
+                modifier = Modifier.padding(
+                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+                )
+            ) {
                 when (uiRestaurantDetailsState.uiLogicState) {
                     UiState.Content -> {
                         RestaurantDetails(
                             restaurant = restaurant,
-                            isLoadingCompleted = true
+                            isLoadingCompleted = true,
+                            isOpen = uiRestaurantDetailsState.isOpen
                         ) {
                             scope.launch {
                                 if (sheetState.isVisible) {
@@ -202,14 +205,34 @@ fun BottomSheet(
                     UiState.Loading -> {
                         RestaurantDetails(
                             restaurant = restaurant,
-                            isLoadingCompleted = false
+                            isLoadingCompleted = false,
+                            isOpen = uiRestaurantDetailsState.isOpen
                         ) {
-                            onDismissRequest()
+                            scope.launch {
+                                if (sheetState.isVisible) {
+                                    sheetState.hide()
+                                    onDismissRequest()
+                                }
+                            }
+                        }
+                    }
+
+                    UiState.Error -> {
+                        RestaurantDetails(
+                            restaurant = restaurant,
+                            isLoadingCompleted = true,
+                            isOpen = null
+                        ) {
+                            scope.launch {
+                                if (sheetState.isVisible) {
+                                    sheetState.hide()
+                                    onDismissRequest()
+                                }
+                            }
                         }
                     }
 
                     UiState.Default -> {}
-                    UiState.Error -> {}
                 }
             }
         }
@@ -265,27 +288,9 @@ private fun HomeScreenPreview() {
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 800)
-@Composable
-private fun BottomSheetPreview() {
-    UmainTheme {
-        Surface {
-            BottomSheet(
-                showSheet = true,
-                uiRestaurantDetailsState = RestaurantDetailsContentState(
-                    uiLogicState = UiState.Content,
-                    isOpen = true
-                ),
-                restaurant = ContentUtils.getSampleRestaurants()[0],
-                onDismissRequest = {}
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 200)
 @Composable
-private fun ErrorViewPreview() {
+private fun HomeErrorViewPreview() {
     UmainTheme {
         Surface {
             ErrorView()

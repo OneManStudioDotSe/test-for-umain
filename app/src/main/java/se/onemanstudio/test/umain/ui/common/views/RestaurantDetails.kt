@@ -33,6 +33,7 @@ fun RestaurantDetails(
     restaurant: RestaurantEntry,
     modifier: Modifier = Modifier,
     isLoadingCompleted: Boolean,
+    isOpen: Boolean?,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -85,7 +86,7 @@ fun RestaurantDetails(
                 title = restaurant.title,
                 subtitle = ContentUtils.convertTagsIntoSingleString(restaurant.tags),
                 isLoadingCompleted = isLoadingCompleted,
-                isOpen = false
+                isOpen = isOpen
             )
         }
     }
@@ -106,6 +107,7 @@ private fun DetailsScreenPreview() {
                 openTimeAsText = "Open",
             ),
             isLoadingCompleted = false,
+            isOpen = true,
             onBackClick = {})
     }
 }

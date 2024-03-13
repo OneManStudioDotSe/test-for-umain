@@ -6,7 +6,6 @@ import com.skydoves.sandwich.messageOrNull
 import com.skydoves.sandwich.onError
 import com.skydoves.sandwich.onException
 import com.skydoves.sandwich.retrofit.serialization.onErrorDeserialize
-import com.skydoves.sandwich.retrofit.statusCode
 import com.skydoves.sandwich.suspendOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,8 +38,6 @@ class HomeViewModel @Inject constructor(
 
     private var activeFilters = mutableListOf<TagEntry>()
     private var allRestaurants = mutableListOf<RestaurantEntry>()
-    private var allFilters = mutableListOf<TagEntry>()
-    private var allFilterIds = mutableListOf<String>()
 
     init {
         _uiHomeState.update {
@@ -58,30 +55,15 @@ class HomeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val restaurants = mutableListOf<RestaurantEntry>()
             val filters = mutableListOf<TagEntry>()
+            var allFilterIds: MutableList<String>
+            val restaurants = mutableListOf<RestaurantEntry>()
 
-            // Get all the restaurants and store them at 'restaurants'
+            // Get all the restaurants and save them locally
             foodDeliveryRepository.getRestaurants()
                 .suspendOnSuccess {
                     // Store locally all the different tags that we come across
-                    data.restaurants.forEach {
-                        restaurants.add(
-                            RestaurantEntry(
-                                id = it.id!!,
-                                title = it.name!!,
-                                promoImageUrl = it.imageUrl!!,
-                                tags = listOf(),
-                                tagsInitially = it.filterIds,
-                                rating = it.rating!!,
-                                openTimeAsText = ContentUtils.convertDeliveryTimeToReadableForm(it.deliveryTimeMinutes!!)
-                            )
-                        )
-
-                        allFilterIds.addAll(it.filterIds)
-                    }
-
-                    allRestaurants = restaurants
+                    allFilterIds = data.restaurants.flatMap { it.filterIds }.toMutableList()
 
                     // For each of the tags, fetch its info and store all their info at 'filters'
                     allFilterIds.distinct().forEach { item ->
@@ -97,32 +79,42 @@ class HomeViewModel @Inject constructor(
                             }
                             .onError {
                                 onErrorDeserialize<String, FilterErrorResponse> { errorMessage ->
-                                    Timber.e("getFilterDetails - Status code: $statusCode -> ${statusCode.code} and error: ${errorMessage.error}, reason: ${errorMessage.reason}")
+                                    handleError(errorMessage.reason)
                                 }
                             }
                             .onException {
-                                Timber.d("getFilterDetails - on exception for $item -> $messageOrNull")
+                                handleError(messageOrNull)
                             }
                     }
 
-                    allFilters = filters
-
-                    // Now that we have all the info we need for the tags, let's update the list of restaurants with the details of their tags
-                    allRestaurants.forEach { restaurant ->
+                    data.restaurants.forEach {
                         val tagsWithDetails = mutableListOf<TagEntry>()
-                        restaurant.tagsInitially.forEach { initialTagId ->
+                        it.filterIds.forEach { initialTagId ->
 
-                            allFilters.forEach { tagEntry ->
+                            filters.forEach { tagEntry ->
                                 if (initialTagId == tagEntry.id) {
                                     tagsWithDetails.add(tagEntry)
                                 }
                             }
-
-                            restaurant.tags = tagsWithDetails //TODO: This is bad. Make all of RestaurantEntry immutable
                         }
+
+                        restaurants.add(
+                            RestaurantEntry(
+                                id = it.id!!,
+                                title = it.name!!,
+                                promoImageUrl = it.imageUrl!!,
+                                tags = tagsWithDetails,
+                                tagsInitially = it.filterIds,
+                                rating = it.rating!!,
+                                openTimeAsText = ContentUtils.convertDeliveryTimeToReadableForm(it.deliveryTimeMinutes!!)
+                            )
+                        )
+
+                        allFilterIds.addAll(it.filterIds)
                     }
 
-                    /*
+                    allRestaurants = restaurants
+
                     Timber.d("------ RESTAURANTS ------")
                     allRestaurants.forEach {
                         Timber.d("Restaurant ${it.title} has ${it.tagsInitially.size} tags (${it.tags.size})")
@@ -130,22 +122,25 @@ class HomeViewModel @Inject constructor(
                             Timber.d("--> ${tag.title} - ${tag.id}")
                         }
                     }
-                     */
 
                     _uiHomeState.update {
                         it.copy(
                             uiLogicState = UiState.Content,
-                            restaurants = restaurants,
+                            restaurants = allRestaurants,
                             filters = filters,
                         )
                     }
                 }
                 .onError {
+                    handleError(messageOrNull)
+
                     _uiHomeState.update {
                         it.copy(uiLogicState = UiState.Error)
                     }
                 }
                 .onException {
+                    handleError(messageOrNull)
+
                     _uiHomeState.update {
                         it.copy(uiLogicState = UiState.Error)
                     }
@@ -154,6 +149,12 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getOpenStatus(restaurantId: String) {
+        _uiRestaurantDetailsState.update {
+            it.copy(
+                uiLogicState = UiState.Loading,
+            )
+        }
+
         viewModelScope.launch {
             foodDeliveryRepository.getOpenStatusForRestaurant(restaurantId)
                 .suspendOnSuccess {
@@ -166,14 +167,17 @@ class HomeViewModel @Inject constructor(
                 }
                 .onError {
                     onErrorDeserialize<String, OpenStatusErrorResponse> { errorMessage ->
-                        Timber.e("getOpenStatus - Status code: $statusCode -> ${statusCode.code} and error: ${errorMessage.error}, reason: ${errorMessage.reason}")
+                        handleError(errorMessage.reason)
                     }
+
                     _uiRestaurantDetailsState.update {
                         it.copy(uiLogicState = UiState.Error)
                     }
 
                 }
                 .onException {
+                    handleError(messageOrNull)
+
                     _uiRestaurantDetailsState.update {
                         it.copy(uiLogicState = UiState.Error)
                     }
@@ -223,5 +227,9 @@ class HomeViewModel @Inject constructor(
         _uiHomeState.update {
             it.copy(uiLogicState = UiState.Content, restaurants = filteredRestaurants)
         }
+    }
+
+    private fun handleError(message: String?) {
+        Timber.d("An error occurred: $message")
     }
 }

@@ -1,5 +1,6 @@
 package se.onemanstudio.test.umain.ui.common.views
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -16,27 +17,43 @@ import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 
 @Composable
-fun Status(isOpen: Boolean) {
+fun Status(isOpen: Boolean?) {
     val context = LocalContext.current
 
     Text(
         modifier = Modifier
             .height(35.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
-        text = if (isOpen) {
-            context.getString(R.string.open)
-        } else {
-            context.getString(R.string.closed)
-        },
         style = MaterialTheme.typography.titleMedium,
-        color = if (isOpen) {
-            MaterialTheme.colorScheme.tertiary
-        } else {
-            MaterialTheme.colorScheme.error
-        },
+        text = getStatusAsText(isOpen, context),
+        color = getStatusColor(isOpen),
         textAlign = TextAlign.Center,
     )
 }
+
+@Composable
+private fun getStatusColor(isOpen: Boolean?) =
+    if (isOpen != null) {
+        if (isOpen) {
+            MaterialTheme.colorScheme.tertiary
+        } else {
+            MaterialTheme.colorScheme.error
+        }
+    } else {
+        se.onemanstudio.test.umain.ui.theme.darkText
+    }
+
+@Composable
+private fun getStatusAsText(isOpen: Boolean?, context: Context) =
+    if (isOpen != null) {
+        if (isOpen) {
+            context.getString(R.string.open)
+        } else {
+            context.getString(R.string.closed)
+        }
+    } else {
+        context.getString(R.string.unknown)
+    }
 
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)

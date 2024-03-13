@@ -47,8 +47,6 @@ fun FilterTag(
     var selected by remember { mutableStateOf(false) }
     selected = isSelected
 
-
-
     Box(
         modifier = Modifier
             .height(48.dp)
@@ -66,7 +64,7 @@ fun FilterTag(
                 enabled = true,
                 selected = isSelected
             ),
-            elevation = FilterChipDefaults.elevatedFilterChipElevation(elevation = 10.dp),
+            elevation = FilterChipDefaults.elevatedFilterChipElevation(elevation = 4.dp),
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .height(48.dp)

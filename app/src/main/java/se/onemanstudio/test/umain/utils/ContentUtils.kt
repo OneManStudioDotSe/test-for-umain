@@ -16,7 +16,6 @@ object ContentUtils {
 
         min.toComponents { days, hours, minutes, _, _ ->
             // Ignore seconds and nanoseconds
-            //Timber.d("Delivery in $days days, $hours hours, and $minutes minutes ($amount)")
 
             if (days >= 1) {
                 return context.getString(R.string.delivery_in_days)
