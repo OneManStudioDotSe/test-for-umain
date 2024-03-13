@@ -115,6 +115,7 @@ class HomeViewModel @Inject constructor(
 
                     allRestaurants = restaurants
 
+                    /*
                     Timber.d("------ RESTAURANTS ------")
                     allRestaurants.forEach {
                         Timber.d("Restaurant ${it.title} has ${it.tagsInitially.size} tags (${it.tags.size})")
@@ -122,6 +123,7 @@ class HomeViewModel @Inject constructor(
                             Timber.d("--> ${tag.title} - ${tag.id}")
                         }
                     }
+                     */
 
                     _uiHomeState.update {
                         it.copy(

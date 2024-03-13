@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -179,7 +179,8 @@ fun BottomSheet(
                 topEnd = 0.dp
             ),
             dragHandle = null,
-            windowInsets = WindowInsets.displayCutout,
+            //windowInsets = WindowInsets(left = 0, right = 0, top = 0, bottom = 0), //use this to make the bottom sheet go behind the status bar
+            windowInsets = BottomSheetDefaults.windowInsets, // use this to make the bottom sheet stay below the status bar
         ) {
             Column(
                 modifier = Modifier.padding(

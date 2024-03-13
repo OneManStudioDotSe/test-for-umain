@@ -36,8 +36,12 @@ fun UmainTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
+
             window.statusBarColor = colorScheme.surface.toArgb()
+            window.navigationBarColor = colorScheme.surface.toArgb()
+
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = true
         }
     }
 

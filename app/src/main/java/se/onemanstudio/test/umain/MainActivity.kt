@@ -12,11 +12,10 @@ import se.onemanstudio.test.umain.ui.theme.UmainTheme
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false) // so that the bottom sheet gets dismissed nicely
 
         setContent {
             UmainTheme {

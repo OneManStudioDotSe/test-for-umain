@@ -1,6 +1,7 @@
 ## 🎨 Overview
 
-This is the implementation of the test for Umain that I developed and can be found [here](https://github.com/apegroup/Code-test?tab=readme-ov-file).
+This is the implementation of the test for Umain that I developed and can be
+found [here](https://github.com/apegroup/Code-test?tab=readme-ov-file).
 The design that I was to implement
 is [at this Figma file](https://www.figma.com/file/yw7DttG4w7F28tmTaxXrLh/Code-test?type=design&node-id=0-1&mode=design&t=K7zNb9PQzWqeJQMj-0)
 and the endpoints that I was told to use are the
@@ -67,10 +68,6 @@ from the local API endpoints which fetches remote data from the network.<br>
 Even though it was not needed or so useful for the scope of this test app, I have done the following
 in order to demonstrate a "healthy" project:
 
-- I have added a simple splash screen that shows up when the app starts. Ideally, all the content
-  that is fetched from the API could be fetched during this time, saved locally and then instantly
-  show the content of the Home screen. I decided to keep things simple and handle all teh content
-  fetching at the Home screen and its related viewmodel
 - I have added an app icon for the sake of making the test a bit more different than the
   competition :)
 - All strings are localized at strings.xml
@@ -97,8 +94,6 @@ in order to demonstrate a "healthy" project:
 
 ## 📋 Notes on the UI
 
-#FFFFFF66
-
 - At Figma, the components page shows the filter having an elevation of 10dp which is not used at
   the main screen, so I have removed it
 - There was an extra space between the filters list and the app top bar called 'gradient' which
@@ -107,9 +102,12 @@ in order to demonstrate a "healthy" project:
 - There was no specification on the transition from the list to the details so based on the icon
   used, the down chevron, I took the creative liberty to assume that the details of a restaurant
   would be shown on a bottom sheet, which is what I also implemented.
-- The colors of the background of the filter tags were using transparency (#FFFFFF )thus making the extraction
+- The colors of the background of the filter tags were using transparency (#FFFFFF )thus making the
+  extraction
   of the color not straightforward and fully compatible with a standardised Material theme so I had
   to use specific color values
+- It was not clear if you wanted the bottom sheet to be behind or below the status bar as there was
+  not text (time, level of battery, signal), so I added support for both (HomeScreen.kt:L183-184)
   <br>
   <br>
   <br>
@@ -120,5 +118,9 @@ There are a few things here and there that could be potentially be improved but 
 the sake of taking a reasonable time to complete the test:
 
 - Support for dark mode and dynamic colors
+- Add a splash screen where the content for the app is fetched so it is available instantly at the
+  Home screen
+- Optimise the bottom sheet UI so
 - The down chevron could be animated while the bottom sheet opens and closes
+- The placeholder image for the restaurant image could be resized to show properly
 - Tests could be added for the view model
