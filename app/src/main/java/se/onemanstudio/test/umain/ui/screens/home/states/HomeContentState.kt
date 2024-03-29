@@ -5,8 +5,8 @@ import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.common.UiState
 
 data class HomeContentState(
-    val uiLogicState: UiState = UiState.Default,
-    val filters: List<TagEntry> = listOf(),
-    val restaurants: List<RestaurantEntry> = listOf(),
-    val activeFilters: List<TagEntry> = listOf()
+    val uiLogicState: UiState,
+    val filters: List<TagEntry>,
+    val restaurants: List<RestaurantEntry>,
+    val activeFilters: List<TagEntry>
 )
