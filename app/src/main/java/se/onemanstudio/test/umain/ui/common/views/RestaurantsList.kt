@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.SampleContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -45,9 +44,7 @@ fun RestaurantsList(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
-            modifier = modifier
-                .fillMaxHeight()
-                .fillMaxWidth()
+            modifier = modifier.fillMaxSize()
         ) {
             itemsIndexed(
                 items = restaurants,
@@ -121,7 +118,7 @@ private fun RestaurantsListPreview() {
                     .fillMaxWidth()
                     .wrapContentHeight()
             ) {
-                RestaurantsList(restaurants = ContentUtils.getSampleRestaurants()) { }
+                RestaurantsList(restaurants = SampleContent.getSampleRestaurants()) { }
             }
         }
     }

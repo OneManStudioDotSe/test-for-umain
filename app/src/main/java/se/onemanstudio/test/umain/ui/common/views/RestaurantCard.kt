@@ -31,7 +31,8 @@ import coil.request.ImageRequest
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.SampleContent
+import se.onemanstudio.test.umain.utils.ListExtensions.convertTagsIntoSingleString
 import se.onemanstudio.test.umain.utils.ViewUtils
 
 @Composable
@@ -48,13 +49,11 @@ fun RestaurantCard(
         shape = RoundedCornerShape(
             topEnd = 12.dp,
             topStart = 12.dp,
-            bottomEnd = 1.dp,
-            bottomStart = 1.dp
         ),
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .padding(horizontal = 0.dp, vertical = 8.dp)
+            .padding(vertical = 8.dp)
     ) {
         Column(
             verticalArrangement = Arrangement.Top,
@@ -78,6 +77,7 @@ fun RestaurantCard(
 
             Row(Modifier.padding(8.dp)) {
                 Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                     modifier = Modifier.weight(1f),
                 ) {
                     Text(
@@ -85,15 +85,11 @@ fun RestaurantCard(
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    Spacer(modifier = Modifier.height(2.dp))
-
                     Text(
-                        text = ContentUtils.convertTagsIntoSingleString(tags),
+                        text = tags.convertTagsIntoSingleString(),
                         style = MaterialTheme.typography.labelMedium,
                         color = se.onemanstudio.test.umain.ui.theme.secondary
                     )
-
-                    Spacer(modifier = Modifier.height(2.dp))
 
                     Row {
                         Image(
@@ -110,6 +106,7 @@ fun RestaurantCard(
                         )
                     }
                 }
+
                 Column(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.End,
@@ -151,7 +148,7 @@ private fun RestaurantCardPreview() {
                 coverUrl = "https://food-delivery.umain.io/images/restaurant/burgers.png",
                 title = "Farang",
                 rating = "5.0",
-                tags = ContentUtils.getSampleTagsFew(),
+                tags = SampleContent.getSampleTagsFew(),
                 openTime = "30 mins"
             )
         }
