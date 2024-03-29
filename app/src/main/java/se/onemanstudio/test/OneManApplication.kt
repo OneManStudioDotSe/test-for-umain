@@ -24,6 +24,5 @@ class OneManApplication : Application() {
 
     companion object {
         private var instance: OneManApplication? = null
-        val context: Context get() = instance!!.applicationContext
     }
 }
