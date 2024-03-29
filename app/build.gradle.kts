@@ -125,6 +125,7 @@ dependencies {
     // DI
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     kapt(libs.hilt.compiler)
 
     //Tools to make life easier

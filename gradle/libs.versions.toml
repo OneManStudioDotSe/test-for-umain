@@ -23,11 +23,12 @@ sandwichRetrofitSerialization = "2.0.5"
 timber = "5.0.1"
 
 #plugins
-agp = "8.3.0"
+agp = "8.3.1"
 #noinspection GradleDependency
 kotlin = "1.9.22"
 pluginHiltAndroid = "2.51"
 versionsCheck = "0.51.0"
+lifecycleRuntimeCompose = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
