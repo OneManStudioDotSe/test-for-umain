@@ -40,12 +40,12 @@ fun FilterTag(
     title: String,
     iconUrl: String,
     index: Int,
-    isSelected: Boolean,
+    //isSelected: Boolean,
     items: List<TagEntry>,
     onSelectedChanged: (TagEntry) -> Unit
 ) {
     var selected by remember { mutableStateOf(false) }
-    selected = isSelected
+    //selected = isSelected
 
     Box(
         modifier = Modifier
@@ -54,15 +54,17 @@ fun FilterTag(
     ) {
         FilterChip(
             colors = FilterChipDefaults.filterChipColors()
-                .copy(containerColor = se.onemanstudio.test.umain.ui.theme.filterBackground)
-                .copy(selectedContainerColor = se.onemanstudio.test.umain.ui.theme.selected),
+                .copy(
+                    containerColor = se.onemanstudio.test.umain.ui.theme.filterBackground,
+                    selectedContainerColor = se.onemanstudio.test.umain.ui.theme.selected
+                ),
             border = FilterChipDefaults.filterChipBorder(
                 borderColor = Color.Transparent,
                 disabledBorderColor = Color.Transparent,
                 borderWidth = 0.dp,
                 selectedBorderWidth = 0.dp,
                 enabled = true,
-                selected = isSelected
+                selected = selected
             ),
             elevation = FilterChipDefaults.elevatedFilterChipElevation(elevation = 4.dp),
             modifier = Modifier
@@ -121,7 +123,7 @@ private fun FilterTagIdlePreview() {
                 title = "Top Rated",
                 iconUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
                 index = 0,
-                isSelected = false,
+                //isSelected = false,
                 items = listOf(),
                 onSelectedChanged = {}
             )
@@ -142,7 +144,7 @@ private fun FilterTagSelectedPreview() {
                 title = "Top Rated",
                 iconUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
                 index = 0,
-                isSelected = true,
+                //isSelected = true,
                 items = listOf(),
                 onSelectedChanged = {}
             )
