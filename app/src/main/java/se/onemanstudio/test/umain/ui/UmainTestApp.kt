@@ -50,9 +50,7 @@ fun UmainTestApp(
                     .padding(innerPadding)
             ) {
                 composable(route = NavDestination.Home.name) {
-                    HomeScreen(
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    HomeScreen(modifier = Modifier.fillMaxSize())
                 }
             }
         }
