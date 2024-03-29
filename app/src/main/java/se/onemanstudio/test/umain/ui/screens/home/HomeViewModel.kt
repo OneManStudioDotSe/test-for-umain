@@ -1,5 +1,6 @@
 package se.onemanstudio.test.umain.ui.screens.home
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.skydoves.sandwich.messageOrNull
@@ -8,32 +9,50 @@ import com.skydoves.sandwich.onException
 import com.skydoves.sandwich.retrofit.serialization.onErrorDeserialize
 import com.skydoves.sandwich.suspendOnSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.network.dto.FilterErrorResponse
 import se.onemanstudio.test.umain.network.dto.OpenStatusErrorResponse
 import se.onemanstudio.test.umain.repository.FoodDeliveryRepository
 import se.onemanstudio.test.umain.ui.common.UiState
+import se.onemanstudio.test.umain.ui.common.views.OpenStatus
 import se.onemanstudio.test.umain.ui.screens.home.states.HomeContentState
 import se.onemanstudio.test.umain.ui.screens.home.states.RestaurantDetailsContentState
-import se.onemanstudio.test.umain.utils.ContentUtils
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    @ApplicationContext private val appContext: Context,
     private val foodDeliveryRepository: FoodDeliveryRepository,
 ) : ViewModel() {
 
-    private val _uiHomeState = MutableStateFlow(HomeContentState())
+    private val _uiHomeState = MutableStateFlow(
+        HomeContentState(
+            uiLogicState = UiState.Default,
+            activeFilters = listOf(),
+            filters = listOf(),
+            restaurants = listOf()
+        )
+    )
     val uiHomeState: StateFlow<HomeContentState> = _uiHomeState.asStateFlow()
 
-    private val _uiRestaurantDetailsState = MutableStateFlow(RestaurantDetailsContentState())
+    private val _uiRestaurantDetailsState =
+        MutableStateFlow(
+            RestaurantDetailsContentState(
+                uiLogicState = UiState.Default,
+                openStatus = OpenStatus.UNKNOWN
+            )
+        )
     val uiRestaurantDetailsState: StateFlow<RestaurantDetailsContentState> = _uiRestaurantDetailsState.asStateFlow()
 
     private var activeFilters = mutableListOf<TagEntry>()
@@ -71,9 +90,9 @@ class HomeViewModel @Inject constructor(
                             .suspendOnSuccess {
                                 filters.add(
                                     TagEntry(
-                                        id = data.id!!,
-                                        title = data.name!!,
-                                        tagImageUrl = data.imageUrl!!
+                                        id = data.id ?: "",
+                                        title = data.name ?: "",
+                                        tagImageUrl = data.imageUrl ?: ""
                                     )
                                 )
                             }
@@ -100,13 +119,14 @@ class HomeViewModel @Inject constructor(
 
                         restaurants.add(
                             RestaurantEntry(
-                                id = it.id!!,
-                                title = it.name!!,
-                                promoImageUrl = it.imageUrl!!,
+                                id = it.id ?: "",
+                                title = it.name ?: "",
+                                promoImageUrl = it.imageUrl ?: "",
                                 tags = tagsWithDetails,
                                 tagsInitially = it.filterIds,
-                                rating = it.rating!!,
-                                openTimeAsText = ContentUtils.convertDeliveryTimeToReadableForm(it.deliveryTimeMinutes!!)
+                                rating = it.rating ?: 5.0,
+                                openTimeAsText = it.deliveryTimeMinutes?.convertDeliveryTimeToReadableForm(appContext)
+                                    ?: ""
                             )
                         )
 
@@ -114,16 +134,6 @@ class HomeViewModel @Inject constructor(
                     }
 
                     allRestaurants = restaurants
-
-                    /*
-                    Timber.d("------ RESTAURANTS ------")
-                    allRestaurants.forEach {
-                        Timber.d("Restaurant ${it.title} has ${it.tagsInitially.size} tags (${it.tags.size})")
-                        it.tags.forEach { tag ->
-                            Timber.d("--> ${tag.title} - ${tag.id}")
-                        }
-                    }
-                     */
 
                     _uiHomeState.update {
                         it.copy(
@@ -163,7 +173,11 @@ class HomeViewModel @Inject constructor(
                     _uiRestaurantDetailsState.update {
                         it.copy(
                             uiLogicState = UiState.Content,
-                            isOpen = data.isCurrentlyOpen!!
+                            openStatus = when (data.isCurrentlyOpen) {
+                                null -> OpenStatus.UNKNOWN
+                                true -> OpenStatus.OPEN
+                                false -> OpenStatus.CLOSED
+                            },
                         )
                     }
                 }
@@ -228,6 +242,28 @@ class HomeViewModel @Inject constructor(
 
         _uiHomeState.update {
             it.copy(uiLogicState = UiState.Content, restaurants = filteredRestaurants)
+        }
+    }
+
+    private fun Int.convertDeliveryTimeToReadableForm(context: Context): String {
+        val min = this.toDuration(DurationUnit.MINUTES)
+
+        min.toComponents { days, hours, minutes, _, _ ->
+            // Ignore seconds and nanoseconds
+            return when {
+                days >= 1 -> context.getString(R.string.delivery_in_days)
+                hours >= 1 -> {
+                    if (hours == 1) context.resources.getQuantityString(R.plurals.delivery_hour, 1)
+                    else String.format(context.resources.getQuantityString(R.plurals.delivery_hour, hours), hours)
+                }
+
+                minutes > 1 -> String.format(
+                    context.resources.getQuantityString(R.plurals.delivery_min, minutes),
+                    minutes
+                )
+
+                else -> context.resources.getQuantityString(R.plurals.delivery_min, 1)
+            }
         }
     }
 
