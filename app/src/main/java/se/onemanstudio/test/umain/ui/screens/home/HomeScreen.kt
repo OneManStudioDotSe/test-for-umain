@@ -36,18 +36,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.common.UiState
 import se.onemanstudio.test.umain.ui.common.views.FilterTagsList
+import se.onemanstudio.test.umain.ui.common.views.OpenStatus
 import se.onemanstudio.test.umain.ui.common.views.RestaurantDetails
 import se.onemanstudio.test.umain.ui.common.views.RestaurantsList
 import se.onemanstudio.test.umain.ui.screens.home.states.HomeContentState
 import se.onemanstudio.test.umain.ui.screens.home.states.RestaurantDetailsContentState
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.SampleContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,8 +61,8 @@ fun HomeScreen(
         contentViewModel.getRestaurants()
     }
 
-    val uiHomeState by contentViewModel.uiHomeState.collectAsState()
-    val uiDetailsState by contentViewModel.uiRestaurantDetailsState.collectAsState()
+    val uiHomeState by contentViewModel.uiHomeState.collectAsStateWithLifecycle()
+    val uiDetailsState by contentViewModel.uiRestaurantDetailsState.collectAsStateWithLifecycle()
 
     val scope = rememberCoroutineScope()
     var showSheet by remember { mutableStateOf(false) }
@@ -192,7 +194,8 @@ fun BottomSheet(
                         RestaurantDetails(
                             restaurant = restaurant,
                             isLoadingCompleted = true,
-                            isOpen = uiRestaurantDetailsState.isOpen
+                            openStatus = uiRestaurantDetailsState.openStatus,
+                            //isOpen = uiRestaurantDetailsState.isOpen
                         ) {
                             scope.launch {
                                 if (sheetState.isVisible) {
@@ -207,7 +210,8 @@ fun BottomSheet(
                         RestaurantDetails(
                             restaurant = restaurant,
                             isLoadingCompleted = false,
-                            isOpen = uiRestaurantDetailsState.isOpen
+                            openStatus = uiRestaurantDetailsState.openStatus,
+                            //isOpen = uiRestaurantDetailsState.isOpen
                         ) {
                             scope.launch {
                                 if (sheetState.isVisible) {
@@ -222,7 +226,7 @@ fun BottomSheet(
                         RestaurantDetails(
                             restaurant = restaurant,
                             isLoadingCompleted = true,
-                            isOpen = null
+                            openStatus = OpenStatus.UNKNOWN,
                         ) {
                             scope.launch {
                                 if (sheetState.isVisible) {
@@ -278,9 +282,9 @@ private fun HomeScreenPreview() {
             HomeContent(
                 uiHomeState = HomeContentState(
                     uiLogicState = UiState.Content,
-                    filters = ContentUtils.getSampleTagsMany(),
-                    restaurants = ContentUtils.getSampleRestaurants().subList(0, 2),
-                    activeFilters = ContentUtils.getSampleTagsMany()
+                    filters = SampleContent.getSampleTagsMany(),
+                    restaurants = SampleContent.getSampleRestaurants().subList(0, 2),
+                    activeFilters = SampleContent.getSampleTagsMany()
                 ),
                 onRestaurantClicked = {},
                 onFilterSelected = {}

@@ -16,8 +16,12 @@ import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 
+enum class OpenStatus {
+    OPEN, CLOSED, UNKNOWN
+}
+
 @Composable
-fun Status(isOpen: Boolean?) {
+fun Status(openStatus: OpenStatus) {
     val context = LocalContext.current
 
     Text(
@@ -25,42 +29,34 @@ fun Status(isOpen: Boolean?) {
             .height(35.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
         style = MaterialTheme.typography.titleMedium,
-        text = getStatusAsText(isOpen, context),
-        color = getStatusColor(isOpen),
+        text = openStatus.toDisplayText(context),
+        color = openStatus.toStatusColor(),
         textAlign = TextAlign.Center,
     )
 }
 
 @Composable
-private fun getStatusColor(isOpen: Boolean?) =
-    if (isOpen != null) {
-        if (isOpen) {
-            MaterialTheme.colorScheme.tertiary
-        } else {
-            MaterialTheme.colorScheme.error
-        }
-    } else {
-        se.onemanstudio.test.umain.ui.theme.darkText
+fun OpenStatus.toStatusColor() =
+    when (this) {
+        OpenStatus.OPEN -> MaterialTheme.colorScheme.tertiary
+        OpenStatus.CLOSED -> MaterialTheme.colorScheme.error
+        OpenStatus.UNKNOWN -> se.onemanstudio.test.umain.ui.theme.darkText
     }
 
-@Composable
-private fun getStatusAsText(isOpen: Boolean?, context: Context) =
-    if (isOpen != null) {
-        if (isOpen) {
-            context.getString(R.string.open)
-        } else {
-            context.getString(R.string.closed)
+fun OpenStatus.toDisplayText(context: Context) =
+    context.getString(
+        when (this) {
+            OpenStatus.OPEN -> R.string.open
+            OpenStatus.CLOSED -> R.string.closed
+            OpenStatus.UNKNOWN -> R.string.unknown
         }
-    } else {
-        context.getString(R.string.unknown)
-    }
-
+    )
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun StatusOpenPreview() {
     UmainTheme {
-        Status(isOpen = true)
+        Status(openStatus = OpenStatus.OPEN)
     }
 }
 
@@ -68,6 +64,6 @@ private fun StatusOpenPreview() {
 @Composable
 private fun StatusClosedPreview() {
     UmainTheme {
-        Status(isOpen = false)
+        Status(openStatus = OpenStatus.CLOSED)
     }
 }
