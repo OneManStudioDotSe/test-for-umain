@@ -5,11 +5,17 @@
     <string name="closed">Closed</string>
     <string name="unknown">---</string>
 
+    <plurals name="delivery_min">
+        <item quantity="one">%1$s min</item>
+        <item quantity="other">%1$s mins</item>
+    </plurals>
+
+    <plurals name="delivery_hour">
+        <item quantity="one">%1$s hour</item>
+        <item quantity="other">%1$s hours</item>
+    </plurals>
+
     <string name="delivery_in_days">Way too long</string>
-    <string name="delivery_in_hour">1 hour</string>
-    <string name="delivery_in_hours">%1$s hours</string>
-    <string name="delivery_in_mins">%1$s mins</string>
-    <string name="delivery_in_min">1 min</string>
 
     <string name="an_error_occurred">An error occurred. Please try again.</string>
 
