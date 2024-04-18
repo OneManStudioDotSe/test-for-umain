@@ -1,46 +1,9 @@
 package se.onemanstudio.test.umain.utils
 
-import se.onemanstudio.test.OneManApplication
-import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.models.TagEntry
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
-object ContentUtils {
-    private const val TAGS_SEPARATOR = " • "
-
-    fun convertDeliveryTimeToReadableForm(amount: Int): String {
-        val min = amount.toDuration(DurationUnit.MINUTES)
-        val context = OneManApplication.context
-
-        min.toComponents { days, hours, minutes, _, _ ->
-            // Ignore seconds and nanoseconds
-
-            if (days >= 1) {
-                return context.getString(R.string.delivery_in_days)
-            } else {
-                if (hours >= 1) {
-                    if (hours == 1) {
-                        return context.getString(R.string.delivery_in_hour)
-                    } else {
-                        return String.format(context.getString(R.string.delivery_in_hours), hours)
-                    }
-                } else {
-                    if (minutes > 1) {
-                        return String.format(context.getString(R.string.delivery_in_mins), minutes)
-                    } else {
-                        return context.getString(R.string.delivery_in_min)
-                    }
-                }
-            }
-        }
-    }
-
-    fun convertTagsIntoSingleString(tags: List<TagEntry>): String {
-        return tags.joinToString(separator = TAGS_SEPARATOR) { it.title }
-    }
-
+object SampleContent {
     private fun getSampleTagsSingle(): List<TagEntry> {
         return listOf(
             TagEntry(

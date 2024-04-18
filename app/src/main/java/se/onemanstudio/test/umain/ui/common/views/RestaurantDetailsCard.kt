@@ -34,7 +34,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.SampleContent
+import se.onemanstudio.test.umain.utils.ListExtensions.convertTagsIntoSingleString
 
 @Composable
 fun DetailCard(
@@ -42,7 +43,7 @@ fun DetailCard(
     title: String,
     subtitle: String,
     isLoadingCompleted: Boolean,
-    isOpen: Boolean?
+    openStatus: OpenStatus
 ) {
     Card(
         modifier = modifier
@@ -75,12 +76,9 @@ fun DetailCard(
                 style = MaterialTheme.typography.bodySmall
             )
 
-            Box(
-                modifier = Modifier
-                    .wrapContentHeight(align = Alignment.CenterVertically)
-            ) {
+            Box(modifier = Modifier.wrapContentHeight(align = Alignment.CenterVertically)) {
                 if (isLoadingCompleted) {
-                    Status(isOpen = isOpen)
+                    Status(openStatus = openStatus)
                 } else {
                     ComponentRectangleLineShort(isLoadingCompleted = false)
                 }
@@ -152,14 +150,14 @@ fun getColours(): List<Color> {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun DetailCardLoadingPreview() {
+internal fun DetailCardLoadingPreview() {
     UmainTheme {
         Box {
             DetailCard(
                 title = "Emilia's Fancy Food",
-                subtitle = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsFew()),
+                subtitle = SampleContent.getSampleTagsFew().convertTagsIntoSingleString(),
                 isLoadingCompleted = false,
-                isOpen = true
+                openStatus = OpenStatus.OPEN
             )
         }
     }
@@ -167,14 +165,14 @@ private fun DetailCardLoadingPreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun DetailCardWithWeirdContentPreview() {
+internal fun DetailCardWithWeirdContentPreview() {
     UmainTheme {
         Box {
             DetailCard(
                 title = "Emilia's Fancy Food With More And More Food And More Food",
-                subtitle = ContentUtils.convertTagsIntoSingleString(ContentUtils.getSampleTagsMany()),
+                subtitle = SampleContent.getSampleTagsMany().convertTagsIntoSingleString(),
                 isLoadingCompleted = true,
-                isOpen = false
+                openStatus = OpenStatus.CLOSED
             )
         }
     }

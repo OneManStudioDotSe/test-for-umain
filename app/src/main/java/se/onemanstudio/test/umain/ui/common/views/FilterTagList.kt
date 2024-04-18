@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateMap
@@ -13,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.SampleContent
 
 @Composable
 fun FilterTagsList(
@@ -21,19 +22,19 @@ fun FilterTagsList(
     items: List<TagEntry>,
     onSelectedChanged: (TagEntry) -> Unit = {}
 ) {
-    val selectedStates = remember { List(items.size) { index -> index to false }.toMutableStateMap() }
+    //val selectedStates = remember { List(items.size) { index -> index to false }.toMutableStateMap() }
 
     Box(modifier = Modifier.wrapContentSize()) {
         LazyRow(modifier = modifier) {
-            items(items.size) { index: Int ->
+            itemsIndexed(items) { index: Int, item: TagEntry ->
                 FilterTag(
-                    title = items[index].title,
-                    iconUrl = items[index].tagImageUrl,
+                    title = item.title,
+                    iconUrl = item.tagImageUrl,
                     index = index,
-                    isSelected = selectedStates[index] == true,
+                    //isSelected = selectedStates[index] == true,
                     items = items,
                 ) {
-                    selectedStates[index] = !selectedStates[index]!!
+                    //selectedStates[index] = !selectedStates[index]!!
 
                     onSelectedChanged(it)
                 }
@@ -44,7 +45,7 @@ fun FilterTagsList(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun FilterTagsListPreview() {
+internal fun FilterTagsListPreview() {
     UmainTheme {
         Box(
             modifier = Modifier
@@ -52,7 +53,7 @@ private fun FilterTagsListPreview() {
                 .wrapContentSize()
         ) {
             FilterTagsList(
-                items = ContentUtils.getSampleTagsMany(),
+                items = SampleContent.getSampleTagsMany(),
                 onSelectedChanged = {}
             )
         }

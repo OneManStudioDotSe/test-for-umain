@@ -35,17 +35,16 @@ import se.onemanstudio.test.umain.models.TagEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 import se.onemanstudio.test.umain.utils.ViewUtils
 
+@SuppressWarnings("LongMethod")
 @Composable
 fun FilterTag(
     title: String,
     iconUrl: String,
     index: Int,
-    isSelected: Boolean,
     items: List<TagEntry>,
     onSelectedChanged: (TagEntry) -> Unit
 ) {
     var selected by remember { mutableStateOf(false) }
-    selected = isSelected
 
     Box(
         modifier = Modifier
@@ -54,15 +53,17 @@ fun FilterTag(
     ) {
         FilterChip(
             colors = FilterChipDefaults.filterChipColors()
-                .copy(containerColor = se.onemanstudio.test.umain.ui.theme.filterBackground)
-                .copy(selectedContainerColor = se.onemanstudio.test.umain.ui.theme.selected),
+                .copy(
+                    containerColor = se.onemanstudio.test.umain.ui.theme.filterBackground,
+                    selectedContainerColor = se.onemanstudio.test.umain.ui.theme.selected
+                ),
             border = FilterChipDefaults.filterChipBorder(
                 borderColor = Color.Transparent,
                 disabledBorderColor = Color.Transparent,
                 borderWidth = 0.dp,
                 selectedBorderWidth = 0.dp,
                 enabled = true,
-                selected = isSelected
+                selected = selected
             ),
             elevation = FilterChipDefaults.elevatedFilterChipElevation(elevation = 4.dp),
             modifier = Modifier
@@ -77,7 +78,7 @@ fun FilterTag(
             },
             label = {
                 Text(
-                    modifier = Modifier.padding(start = 40.dp), //32dp to reach the right edge of the image + 8 dp according to design
+                    modifier = Modifier.padding(start = 40.dp),
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
                     color = if (selected) {
@@ -110,7 +111,7 @@ fun FilterTag(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun FilterTagIdlePreview() {
+internal fun FilterTagIdlePreview() {
     UmainTheme {
         Box(
             modifier = Modifier
@@ -121,7 +122,6 @@ private fun FilterTagIdlePreview() {
                 title = "Top Rated",
                 iconUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
                 index = 0,
-                isSelected = false,
                 items = listOf(),
                 onSelectedChanged = {}
             )
@@ -131,7 +131,7 @@ private fun FilterTagIdlePreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun FilterTagSelectedPreview() {
+internal fun FilterTagSelectedPreview() {
     UmainTheme {
         Box(
             modifier = Modifier
@@ -142,7 +142,7 @@ private fun FilterTagSelectedPreview() {
                 title = "Top Rated",
                 iconUrl = "https://food-delivery.umain.io/images/filter/filter_top_rated.png",
                 index = 0,
-                isSelected = true,
+                //isSelected = true,
                 items = listOf(),
                 onSelectedChanged = {}
             )

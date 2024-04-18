@@ -50,9 +50,7 @@ fun UmainTestApp(
                     .padding(innerPadding)
             ) {
                 composable(route = NavDestination.Home.name) {
-                    HomeScreen(
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    HomeScreen(modifier = Modifier.fillMaxSize())
                 }
             }
         }
@@ -82,7 +80,7 @@ fun AppTopBar() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 400)
 @Composable
-private fun AppTopBarPreview() {
+internal fun AppTopBarPreview() {
     UmainTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),

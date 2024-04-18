@@ -15,7 +15,9 @@ import se.onemanstudio.test.umain.network.FoodDeliveryService
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val TIMEOUT = 30L
+private const val COMPLETE_TIMEOUT = 30L
+private const val CONNECT_TIMEOUT = 15L
+private const val GENERAL_TIMEOUT = 15L
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -26,10 +28,10 @@ object NetworkModule {
     fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE))
-            .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .readTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .callTimeout(TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(GENERAL_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(GENERAL_TIMEOUT, TimeUnit.SECONDS)
+            .callTimeout(COMPLETE_TIMEOUT, TimeUnit.SECONDS)
             .build()
     }
 

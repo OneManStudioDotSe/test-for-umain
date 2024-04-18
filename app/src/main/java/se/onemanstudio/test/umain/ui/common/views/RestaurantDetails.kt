@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,7 +24,8 @@ import coil.request.ImageRequest
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.models.RestaurantEntry
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
-import se.onemanstudio.test.umain.utils.ContentUtils
+import se.onemanstudio.test.umain.utils.SampleContent
+import se.onemanstudio.test.umain.utils.ListExtensions.convertTagsIntoSingleString
 import se.onemanstudio.test.umain.utils.ViewUtils
 
 @Composable
@@ -33,14 +33,12 @@ fun RestaurantDetails(
     restaurant: RestaurantEntry,
     modifier: Modifier = Modifier,
     isLoadingCompleted: Boolean,
-    isOpen: Boolean?,
+    openStatus: OpenStatus,
     onBackClick: () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.TopCenter,
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
+        modifier = modifier.fillMaxSize(),
     ) {
         AsyncImage(
             modifier = Modifier
@@ -64,7 +62,7 @@ fun RestaurantDetails(
                 .align(Alignment.TopStart)
                 .padding(start = 24.dp, top = 24.dp)
                 .size(48.dp)
-                .clickable { onBackClick.invoke() }
+                .clickable { onBackClick() }
         ) {
             Image(
                 modifier = Modifier
@@ -84,9 +82,9 @@ fun RestaurantDetails(
             DetailCard(
                 modifier = Modifier.padding(top = 180.dp),
                 title = restaurant.title,
-                subtitle = ContentUtils.convertTagsIntoSingleString(restaurant.tags),
+                subtitle = restaurant.tags.convertTagsIntoSingleString(),
                 isLoadingCompleted = isLoadingCompleted,
-                isOpen = isOpen
+                openStatus = openStatus
             )
         }
     }
@@ -94,20 +92,20 @@ fun RestaurantDetails(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 600)
 @Composable
-private fun DetailsScreenPreview() {
+internal fun DetailsScreenPreview() {
     UmainTheme {
         RestaurantDetails(
             restaurant = RestaurantEntry(
                 id = "id",
                 title = "Restaurant's title",
                 promoImageUrl = "https://food-delivery.umain.io/images/restaurant/coffee.png",
-                tags = ContentUtils.getSampleTagsFew(),
+                tags = SampleContent.getSampleTagsFew(),
                 tagsInitially = listOf("tagId1", "tagId2", "tagId3"),
                 rating = 5.0,
                 openTimeAsText = "Open",
             ),
             isLoadingCompleted = false,
-            isOpen = true,
+            openStatus = OpenStatus.OPEN,
             onBackClick = {})
     }
 }

@@ -10,8 +10,9 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.versionsCheck) apply false
+    alias(libs.plugins.detekt) apply false
     alias(libs.plugins.hilt) apply false
-    kotlin("plugin.serialization") version "1.9.22" apply false
+    kotlin("plugin.serialization") version "1.9.23" apply false
 }
 
 fun isNonStable(version: String): Boolean {
