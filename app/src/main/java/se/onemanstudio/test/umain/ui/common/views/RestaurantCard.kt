@@ -35,6 +35,7 @@ import se.onemanstudio.test.umain.utils.SampleContent
 import se.onemanstudio.test.umain.utils.ListExtensions.convertTagsIntoSingleString
 import se.onemanstudio.test.umain.utils.ViewUtils
 
+@SuppressWarnings("LongMethod")
 @Composable
 fun RestaurantCard(
     coverUrl: String,
@@ -136,7 +137,7 @@ fun RestaurantCard(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun RestaurantCardPreview() {
+internal fun RestaurantCardPreview() {
     UmainTheme {
         Box(
             modifier = Modifier

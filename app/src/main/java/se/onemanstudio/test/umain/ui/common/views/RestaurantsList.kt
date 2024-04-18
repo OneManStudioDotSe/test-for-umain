@@ -109,7 +109,7 @@ fun NoContent() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 600)
 @Composable
-private fun RestaurantsListPreview() {
+internal fun RestaurantsListPreview() {
     UmainTheme {
         Surface {
             Box(
@@ -126,7 +126,7 @@ private fun RestaurantsListPreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 600)
 @Composable
-private fun RestaurantsListEmptyPreview() {
+internal fun RestaurantsListEmptyPreview() {
     UmainTheme {
         Surface {
             Box(

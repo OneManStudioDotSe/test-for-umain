@@ -16,7 +16,8 @@ class OneManApplication : Application() {
     private fun initializeModules() {
         instance = this
 
-        // "There are no Tree implementations installed by default because every time you log in production, a puppy dies."
+        // "There are no Tree implementations installed by default because
+        // every time you log in production, a puppy dies."
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

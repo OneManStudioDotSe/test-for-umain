@@ -16,10 +16,6 @@ import androidx.compose.ui.unit.dp
 import se.onemanstudio.test.umain.R
 import se.onemanstudio.test.umain.ui.theme.UmainTheme
 
-enum class OpenStatus {
-    OPEN, CLOSED, UNKNOWN
-}
-
 @Composable
 fun Status(openStatus: OpenStatus) {
     val context = LocalContext.current
@@ -52,9 +48,13 @@ fun OpenStatus.toDisplayText(context: Context) =
         }
     )
 
+enum class OpenStatus {
+    OPEN, CLOSED, UNKNOWN
+}
+
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun StatusOpenPreview() {
+internal fun StatusOpenPreview() {
     UmainTheme {
         Status(openStatus = OpenStatus.OPEN)
     }
@@ -62,7 +62,7 @@ private fun StatusOpenPreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun StatusClosedPreview() {
+internal fun StatusClosedPreview() {
     UmainTheme {
         Status(openStatus = OpenStatus.CLOSED)
     }

@@ -1,34 +1,36 @@
 [versions]
-coreKtx = "1.12.0"
+coreKtx = "1.13.0"
 hiltNavigationCompose = "1.2.0"
 lifecycleRuntimeKtx = "2.7.0"
-activityCompose = "1.8.2"
+activityCompose = "1.9.0"
 
 material3 = "1.2.1"
 
-composeBom = "2024.02.02"
+composeBom = "2024.04.01"
 navigationCompose = "2.7.7"
 coilCompose = "2.6.0"
 okhttp = "4.12.0"
 loggingInterceptor = "4.12.0"
 okhttpUrlconnection = "4.12.0"
-retrofit = "2.9.0"
-converterGson = "2.9.0"
+retrofit = "2.11.0"
+converterGson = "2.11.0"
 
-hiltAndroid = "2.51"
-hiltCompiler = "2.51"
+hiltAndroid = "2.51.1"
+hiltCompiler = "2.51.1"
 
-sandwichRetrofit = "2.0.5"
-sandwichRetrofitSerialization = "2.0.5"
+sandwichRetrofit = "2.0.6"
+sandwichRetrofitSerialization = "2.0.6"
 timber = "5.0.1"
 
-#plugins
-agp = "8.3.1"
-#noinspection GradleDependency
-kotlin = "1.9.22"
-pluginHiltAndroid = "2.51"
-versionsCheck = "0.51.0"
 lifecycleRuntimeCompose = "2.7.0"
+
+#plugins
+agp = "8.3.2"
+kotlin = "1.9.23"
+pluginHiltAndroid = "2.51.1"
+versionsCheck = "0.51.0"
+detekt = "1.23.6"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,3 +66,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "pluginHiltAndroid" }
 versionsCheck = { id = "com.github.ben-manes.versions", version.ref = "versionsCheck" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

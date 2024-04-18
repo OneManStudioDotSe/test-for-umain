@@ -66,6 +66,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    @SuppressWarnings("LongMethod")
     fun getRestaurants() {
         _uiHomeState.update {
             it.copy(
@@ -271,3 +272,4 @@ class HomeViewModel @Inject constructor(
         Timber.d("An error occurred: $message")
     }
 }
+

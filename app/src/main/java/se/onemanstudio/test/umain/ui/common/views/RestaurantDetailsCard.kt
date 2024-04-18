@@ -150,7 +150,7 @@ fun getColours(): List<Color> {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun DetailCardLoadingPreview() {
+internal fun DetailCardLoadingPreview() {
     UmainTheme {
         Box {
             DetailCard(
@@ -165,7 +165,7 @@ private fun DetailCardLoadingPreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun DetailCardWithWeirdContentPreview() {
+internal fun DetailCardWithWeirdContentPreview() {
     UmainTheme {
         Box {
             DetailCard(

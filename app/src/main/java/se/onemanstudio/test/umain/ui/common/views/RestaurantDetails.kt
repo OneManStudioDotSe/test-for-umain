@@ -92,7 +92,7 @@ fun RestaurantDetails(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 600)
 @Composable
-private fun DetailsScreenPreview() {
+internal fun DetailsScreenPreview() {
     UmainTheme {
         RestaurantDetails(
             restaurant = RestaurantEntry(

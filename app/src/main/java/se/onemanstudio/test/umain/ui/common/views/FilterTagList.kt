@@ -45,7 +45,7 @@ fun FilterTagsList(
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun FilterTagsListPreview() {
+internal fun FilterTagsListPreview() {
     UmainTheme {
         Box(
             modifier = Modifier

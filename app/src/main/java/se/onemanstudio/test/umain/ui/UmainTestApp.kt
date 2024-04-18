@@ -80,7 +80,7 @@ fun AppTopBar() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 400)
 @Composable
-private fun AppTopBarPreview() {
+internal fun AppTopBarPreview() {
     UmainTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),

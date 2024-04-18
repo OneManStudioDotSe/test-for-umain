@@ -159,6 +159,7 @@ fun HomeContent(
     }
 }
 
+@SuppressWarnings("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheet(
@@ -181,8 +182,7 @@ fun BottomSheet(
                 topEnd = 0.dp
             ),
             dragHandle = null,
-            //windowInsets = WindowInsets(left = 0, right = 0, top = 0, bottom = 0), //use this to make the bottom sheet go behind the status bar
-            windowInsets = BottomSheetDefaults.windowInsets, // use this to make the bottom sheet stay below the status bar
+            windowInsets = BottomSheetDefaults.windowInsets, // use this to make the bottom sheet stay below status bar
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -195,7 +195,6 @@ fun BottomSheet(
                             restaurant = restaurant,
                             isLoadingCompleted = true,
                             openStatus = uiRestaurantDetailsState.openStatus,
-                            //isOpen = uiRestaurantDetailsState.isOpen
                         ) {
                             scope.launch {
                                 if (sheetState.isVisible) {
@@ -211,7 +210,6 @@ fun BottomSheet(
                             restaurant = restaurant,
                             isLoadingCompleted = false,
                             openStatus = uiRestaurantDetailsState.openStatus,
-                            //isOpen = uiRestaurantDetailsState.isOpen
                         ) {
                             scope.launch {
                                 if (sheetState.isVisible) {
@@ -276,7 +274,7 @@ private fun ErrorView() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 800)
 @Composable
-private fun HomeScreenPreview() {
+internal fun HomeScreenPreview() {
     UmainTheme {
         Surface {
             HomeContent(
@@ -295,7 +293,7 @@ private fun HomeScreenPreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 200)
 @Composable
-private fun HomeErrorViewPreview() {
+internal fun HomeErrorViewPreview() {
     UmainTheme {
         Surface {
             ErrorView()
@@ -305,7 +303,7 @@ private fun HomeErrorViewPreview() {
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 200)
 @Composable
-private fun HomeViewLoadingPreview() {
+internal fun HomeViewLoadingPreview() {
     UmainTheme {
         Surface {
             LoadingView()
