@@ -16,10 +16,16 @@ ones [found here](https://food-delivery.umain.io/swagger/).
 | ![Screenshot #1](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_1.png) | ![Screenshot #2](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_2.png) |
 | ![Screenshot #3](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_3.png) | ![Screenshot #4](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_5.png) |
 
-
-
-
-
+## 📝 Features
+- 100% Compose UI and Kotlin
+- Custom theme with colors and typography
+- Bottom sheet
+- Content repository for REST-based network calls with Retrofit and Sandwich
+- MVVM with separated Viewmodels
+- DI with Hilt
+- Logging with Timber
+- Separated UI components
+- 
 ## 🛠 Tech Stack & Open Source Libraries
 
 - Minimum SDK level 24.

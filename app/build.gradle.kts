@@ -32,14 +32,9 @@ android {
             buildConfigField("Boolean", "DEBUG", "true")
             buildConfigField("String", "BASE_URL", "\"https://food-delivery.umain.io/api/v1/\"")
 
-            versionNameSuffix = "-debug"
-            applicationIdSuffix = ".debug"
-
             isDebuggable = true
             isJniDebuggable = false
 
-            //isShrinkResources = false
-            //isMinifyEnabled = false
             proguardFiles("proguard-android.txt", "proguard-rules.pro")
 
         }
@@ -50,8 +45,6 @@ android {
 
             isDebuggable = false
 
-            //isShrinkResources = true
-            //isMinifyEnabled = true
             proguardFiles("proguard-android-optimize.txt", "proguard-rules.pro")
         }
     }
