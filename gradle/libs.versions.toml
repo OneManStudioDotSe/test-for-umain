@@ -1,12 +1,12 @@
 [versions]
-coreKtx = "1.13.0"
+coreKtx = "1.13.1"
 hiltNavigationCompose = "1.2.0"
-lifecycleRuntimeKtx = "2.7.0"
+lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 
 material3 = "1.2.1"
 
-composeBom = "2024.04.01"
+composeBom = "2024.05.00"
 navigationCompose = "2.7.7"
 coilCompose = "2.6.0"
 okhttp = "4.12.0"
@@ -18,15 +18,15 @@ converterGson = "2.11.0"
 hiltAndroid = "2.51.1"
 hiltCompiler = "2.51.1"
 
-sandwichRetrofit = "2.0.6"
-sandwichRetrofitSerialization = "2.0.6"
+sandwichRetrofit = "2.0.7"
+sandwichRetrofitSerialization = "2.0.7"
 timber = "5.0.1"
 
-lifecycleRuntimeCompose = "2.7.0"
+lifecycleRuntimeCompose = "2.8.0"
 
 #plugins
-agp = "8.3.2"
-kotlin = "1.9.23"
+agp = "8.4.0"
+kotlin = "1.9.24"
 pluginHiltAndroid = "2.51.1"
 versionsCheck = "0.51.0"
 detekt = "1.23.6"
