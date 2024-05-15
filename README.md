@@ -15,6 +15,9 @@ ones [found here](https://food-delivery.umain.io/swagger/).
 |---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | ![Screenshot #1](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_1.png) | ![Screenshot #2](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_2.png) |
 | ![Screenshot #3](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_3.png) | ![Screenshot #4](https://raw.github.com/OneManStudioDotSe/test-for-umain/main/screenshots/screen_5.png) |
+ <br>
+ <br>
+ <br>
 
 ## 📝 Features
 - 100% Compose UI and Kotlin
@@ -25,7 +28,10 @@ ones [found here](https://food-delivery.umain.io/swagger/).
 - DI with Hilt
 - Logging with Timber
 - Separated UI components
-- 
+  <br>
+  <br>
+  <br>
+
 ## 🛠 Tech Stack & Open Source Libraries
 
 - Minimum SDK level 24.
@@ -140,3 +146,6 @@ the sake of taking a reasonable time to complete the test:
 - The down chevron could be animated while the bottom sheet opens and closes
 - The placeholder image for the restaurant image could be resized to show properly
 - Tests could be added for the view model
+ <br>
+ <br>
+ <br>
